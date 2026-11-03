@@ -1,0 +1,25 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03 (repo response trimmed to the fields used).",
+  "GET /repos/octocat/Hello-World/license": {
+    "status": 404,
+    "data": {
+      "message": "Not Found",
+      "documentation_url": "https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository",
+      "status": "404"
+    }
+  },
+  "GET /repos/octocat/Hello-World": {
+    "status": 200,
+    "data": {
+      "id": 1296269,
+      "name": "Hello-World",
+      "full_name": "octocat/Hello-World",
+      "private": false,
+      "html_url": "https://github.com/octocat/Hello-World",
+      "default_branch": "master",
+      "archived": false,
+      "license": null,
+      "pushed_at": "2024-08-20T23:54:42Z"
+    }
+  }
+}

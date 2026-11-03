@@ -1,0 +1,19 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03.",
+  "GET /repos/octocat/this-repo-does-not-exist-xyz/license": {
+    "status": 404,
+    "data": {
+      "message": "Not Found",
+      "documentation_url": "https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository",
+      "status": "404"
+    }
+  },
+  "GET /repos/octocat/this-repo-does-not-exist-xyz": {
+    "status": 404,
+    "data": {
+      "message": "Not Found",
+      "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository",
+      "status": "404"
+    }
+  }
+}
