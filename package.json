@@ -11,6 +11,7 @@
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json",
     "fair": "node src/fair/main.ts",
+    "heartbeat": "node src/heartbeat/main.ts",
     "csp": "node scripts/csp.mjs index.html"
   },
   "devDependencies": {
