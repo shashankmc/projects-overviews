@@ -1,0 +1,42 @@
+{
+  "_note": "Recorded 2026-11-03; trimmed to the fields used.",
+  "GET https://pypi.org/pypi/Hello-World/json": {
+    "status": 200,
+    "data": {
+      "info": {
+        "name": "hello-world",
+        "home_page": "UNKNOWN",
+        "download_url": "UNKNOWN",
+        "project_urls": {
+          "Download": "UNKNOWN",
+          "Homepage": "UNKNOWN"
+        },
+        "package_url": "https://pypi.org/project/hello-world/"
+      }
+    }
+  },
+  "GET https://crandb.r-pkg.org/Hello-World": {
+    "status": 404,
+    "data": {
+      "error": "not_found",
+      "reason": "document not found"
+    }
+  },
+  "GET https://registry.npmjs.org/hello-world": {
+    "status": 200,
+    "data": {
+      "name": "hello-world"
+    }
+  },
+  "GET https://archive.softwareheritage.org/api/1/origin/https://github.com/octocat/Hello-World/get/": {
+    "status": 200,
+    "data": {
+      "url": "https://github.com/octocat/Hello-World",
+      "visit_types": [
+        "git"
+      ],
+      "origin_visits_url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/octocat/Hello-World/visits/",
+      "metadata_authorities_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:ori:81c1d5e3fcfe91007f05840ec935774f5264a735/authorities/"
+    }
+  }
+}

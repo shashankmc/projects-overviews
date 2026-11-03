@@ -42,4 +42,15 @@ describe('runFairJob (nightly run)', () => {
     expect(w.issues.filter((i) => i.state === 'open')).toHaveLength(1);
     expect(w.issues[0]!.body).toContain('2026-11-04T02:00:00.000Z');
   });
+
+  it('shows all 12 indicators for each checked repo, unknown where nothing was recorded', async () => {
+    const w = world();
+    await runFairJob({ registry, gh: w.client, repo: REPO, now: new Date('2026-11-03T02:00:00Z') });
+    const body = w.issues[0]!.body;
+    expect(body).toContain('[cli/cli](https://github.com/cli/cli): FAIR evidence 1 of 12 automatable (11 unknown)');
+    for (const title of ['Licence', 'CITATION.cff', 'codemeta.json', 'DOI-bearing release', 'Registry presence', 'README and docs',
+      'Install instructions', 'Tests/CI', 'Versioned releases', 'Declared dependencies', 'Contributing guide', 'Recent activity']) {
+      expect(body).toContain(`| ${title} | `);
+    }
+  });
 });

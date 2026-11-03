@@ -1,5 +1,5 @@
 import { unknownResult } from './errors.ts';
-import type { GitHubClient, IndicatorResult, RepoRef, Rule } from './types.ts';
+import type { GitHubClient, HttpClient, IndicatorResult, RepoRef, Rule, RuleContext } from './types.ts';
 
 /** The slice of data/registry.json the FAIR check reads. `repos` is optional until the RSE backfills it. */
 export interface RegistryInput {
@@ -33,7 +33,19 @@ export interface CheckOptions {
   now?: Date;
   /** Per-rule timeout; past it the indicator is unknown (spec: 10 s per external call). */
   timeoutMs?: number;
+  /**
+   * Client for non-GitHub lookups (Zenodo, PyPI, CRAN, npm, Software Heritage).
+   * Defaults to one that refuses every call, so those indicators read unknown
+   * and nothing reaches the network unless a client is passed explicitly.
+   */
+  http?: HttpClient;
 }
+
+const noHttp: HttpClient = {
+  get: async () => {
+    throw new Error('No HttpClient configured');
+  },
+};
 
 export const DEFAULT_TIMEOUT_MS = 10_000;
 
@@ -45,13 +57,13 @@ export function parseRepoRef(listed: string): RepoRef | null {
   return { owner, name, url: `https://github.com/${owner}/${name}` };
 }
 
-async function runRule(rule: Rule, repo: RepoRef, gh: GitHubClient, timeoutMs: number): Promise<IndicatorResult> {
+async function runRule(rule: Rule, repo: RepoRef, gh: GitHubClient, ctx: RuleContext, timeoutMs: number): Promise<IndicatorResult> {
   let timer: NodeJS.Timeout | undefined;
   const timeout = new Promise<IndicatorResult>((resolve) => {
     timer = setTimeout(() => resolve(unknownResult(rule.indicator, 'timeout')), timeoutMs);
   });
   try {
-    return await Promise.race([rule.check(repo, gh), timeout]);
+    return await Promise.race([rule.check(repo, gh, ctx), timeout]);
   } catch (err) {
     const cls = err instanceof Error && err.name === 'TimeoutError' ? 'timeout' : 'network_error';
     return unknownResult(rule.indicator, cls);
@@ -61,7 +73,8 @@ async function runRule(rule: Rule, repo: RepoRef, gh: GitHubClient, timeoutMs: n
 }
 
 export async function runFairCheck(registry: RegistryInput, gh: GitHubClient, options: CheckOptions): Promise<FairReport> {
-  const { rules, now = new Date(), timeoutMs = DEFAULT_TIMEOUT_MS } = options;
+  const { rules, now = new Date(), timeoutMs = DEFAULT_TIMEOUT_MS, http = noHttp } = options;
+  const ctx: RuleContext = { http, now };
   const projects: ProjectReport[] = [];
   for (const project of registry.projects) {
     const repos: RepoReport[] = [];
@@ -72,7 +85,7 @@ export async function runFairCheck(registry: RegistryInput, gh: GitHubClient, op
         continue;
       }
       const results: IndicatorResult[] = [];
-      for (const rule of rules) results.push(await runRule(rule, repo, gh, timeoutMs));
+      for (const rule of rules) results.push(await runRule(rule, repo, gh, ctx, timeoutMs));
       repos.push({ listed, repo, results });
     }
     projects.push({ id: project.id, name: project.name, repos });

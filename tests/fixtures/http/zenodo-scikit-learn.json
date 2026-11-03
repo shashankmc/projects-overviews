@@ -1,0 +1,32 @@
+{
+  "_note": "Recorded 2026-11-03; trimmed to the fields used.",
+  "GET https://zenodo.org/api/records?q=metadata.related_identifiers.identifier%3Ahttps%5C%3A%5C%2F%5C%2Fgithub%5C.com%5C%2Fscikit%5C-learn%5C%2Fscikit%5C-learn%5C%2Ftree%5C%2F*&size=10": {
+    "status": 200,
+    "data": {
+      "hits": {
+        "total": 1,
+        "hits": [
+          {
+            "id": 22705923,
+            "doi": "10.5281/zenodo.22705923",
+            "conceptdoi": "10.5281/zenodo.591564",
+            "links": {
+              "self_html": "https://zenodo.org/records/22705923"
+            },
+            "metadata": {
+              "title": "scikit-learn",
+              "related_identifiers": [
+                {
+                  "identifier": "https://github.com/scikit-learn/scikit-learn/tree/1.9.1",
+                  "relation": "isSupplementTo",
+                  "resource_type": "software",
+                  "scheme": "url"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

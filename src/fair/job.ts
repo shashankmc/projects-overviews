@@ -2,7 +2,7 @@ import { runFairCheck, type FairReport, type RegistryInput } from './check.ts';
 import { upsertIssue, type UpsertOutcome } from './issue.ts';
 import { renderReport } from './report.ts';
 import { rules as defaultRules } from './rules/index.ts';
-import type { GitHubClient, Rule } from './types.ts';
+import type { GitHubClient, HttpClient, Rule } from './types.ts';
 
 export const REPORT_LABEL = 'fair-report';
 export const REPORT_TITLE = 'FAIR evidence report (nightly)';
@@ -12,6 +12,8 @@ export interface JobOptions {
   gh: GitHubClient;
   /** `owner/name` of the repo that holds the rolling RSE issue. */
   repo: string;
+  /** Non-GitHub lookups (Zenodo, PyPI, CRAN, npm, Software Heritage); without it those indicators read unknown. */
+  http?: HttpClient;
   rules?: Rule[];
   now?: Date;
   timeoutMs?: number;
@@ -23,6 +25,7 @@ export async function runFairJob(opts: JobOptions): Promise<{ report: FairReport
     rules: opts.rules ?? defaultRules,
     now: opts.now,
     timeoutMs: opts.timeoutMs,
+    http: opts.http,
   });
   const issue = await upsertIssue(opts.gh, {
     repo: opts.repo,

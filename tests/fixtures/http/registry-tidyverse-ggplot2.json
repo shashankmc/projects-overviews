@@ -1,0 +1,42 @@
+{
+  "_note": "Recorded 2026-11-03; trimmed to the fields used.",
+  "GET https://pypi.org/pypi/ggplot2/json": {
+    "status": 404,
+    "data": {
+      "message": "Not Found"
+    }
+  },
+  "GET https://crandb.r-pkg.org/ggplot2": {
+    "status": 200,
+    "data": {
+      "Package": "ggplot2",
+      "URL": "https://ggplot2.tidyverse.org,\nhttps://github.com/tidyverse/ggplot2",
+      "BugReports": "https://github.com/tidyverse/ggplot2/issues"
+    }
+  },
+  "GET https://registry.npmjs.org/ggplot2": {
+    "status": 200,
+    "data": {
+      "name": "ggplot2",
+      "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/dereckmezquita/ggplot2.git"
+      },
+      "homepage": "https://github.com/dereckmezquita/ggplot2#readme",
+      "bugs": {
+        "url": "https://github.com/dereckmezquita/ggplot2/issues"
+      }
+    }
+  },
+  "GET https://archive.softwareheritage.org/api/1/origin/https://github.com/tidyverse/ggplot2/get/": {
+    "status": 200,
+    "data": {
+      "url": "https://github.com/tidyverse/ggplot2",
+      "visit_types": [
+        "git"
+      ],
+      "origin_visits_url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/tidyverse/ggplot2/visits/",
+      "metadata_authorities_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:ori:115b3009882d41d07b0304643345f1debee909cf/authorities/"
+    }
+  }
+}

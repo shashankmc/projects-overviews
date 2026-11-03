@@ -1,12 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { licence } from '../../../src/fair/rules/licence.ts';
-import { fixtureClient } from './fixture-client.ts';
-
-const repo = (owner: string, name: string) => ({ owner, name, url: `https://github.com/${owner}/${name}` });
+import { fixtureClient, offlineContext, repo } from './fixture-client.ts';
 
 describe('licence rule', () => {
   it('is met when GitHub detects an SPDX licence, with the LICENSE file as evidence', async () => {
-    const result = await licence.check(repo('cli', 'cli'), fixtureClient('licence-met'));
+    const result = await licence.check(repo('cli', 'cli'), fixtureClient('licence-met'), offlineContext());
     expect(result).toMatchObject({
       indicator: 'licence',
       state: 'met',
@@ -16,7 +14,7 @@ describe('licence rule', () => {
   });
 
   it('is unmet when the repo exists but has no licence file, with the repo as evidence', async () => {
-    const result = await licence.check(repo('octocat', 'Hello-World'), fixtureClient('licence-unmet'));
+    const result = await licence.check(repo('octocat', 'Hello-World'), fixtureClient('licence-unmet'), offlineContext());
     expect(result).toMatchObject({
       indicator: 'licence',
       state: 'unmet',
@@ -25,7 +23,7 @@ describe('licence rule', () => {
   });
 
   it('is unmet when the LICENSE file is not SPDX-detectable, linking the file', async () => {
-    const result = await licence.check(repo('cli', 'cli'), fixtureClient('licence-noassertion'));
+    const result = await licence.check(repo('cli', 'cli'), fixtureClient('licence-noassertion'), offlineContext());
     expect(result).toMatchObject({
       state: 'unmet',
       evidence_url: 'https://github.com/cli/cli/blob/trunk/LICENSE',
@@ -34,7 +32,7 @@ describe('licence rule', () => {
   });
 
   it('is unknown, not unmet, when GitHub rate-limits the request', async () => {
-    const result = await licence.check(repo('cli', 'cli'), fixtureClient('licence-rate-limited'));
+    const result = await licence.check(repo('cli', 'cli'), fixtureClient('licence-rate-limited'), offlineContext());
     expect(result).toMatchObject({ state: 'unknown', evidence_url: null });
     expect(result.detail).toContain('rate_limited');
   });
@@ -43,6 +41,7 @@ describe('licence rule', () => {
     const result = await licence.check(
       repo('octocat', 'this-repo-does-not-exist-xyz'),
       fixtureClient('licence-repo-not-found'),
+      offlineContext(),
     );
     expect(result).toMatchObject({ state: 'unknown', evidence_url: null });
     expect(result.detail).toContain('not_found');

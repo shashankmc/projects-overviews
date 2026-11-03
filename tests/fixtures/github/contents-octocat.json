@@ -1,0 +1,14 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/octocat/Hello-World/contents": {
+    "status": 200,
+    "data": [
+      {
+        "name": "README",
+        "path": "README",
+        "type": "file",
+        "html_url": "https://github.com/octocat/Hello-World/blob/master/README"
+      }
+    ]
+  }
+}

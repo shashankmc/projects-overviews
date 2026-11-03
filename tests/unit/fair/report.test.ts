@@ -42,8 +42,8 @@ describe('renderReport', () => {
     expect(body).toMatch(/## Am AI Right\s+_No repos listed\._/);
   });
 
-  it('shows each indicator state with its evidence link and a met count per repo', () => {
-    expect(body).toContain('[cli/cli](https://github.com/cli/cli): 1 of 1 met');
+  it('shows each indicator state with its evidence link and an "n of m automatable" score per repo', () => {
+    expect(body).toContain('[cli/cli](https://github.com/cli/cli): FAIR evidence 1 of 1 automatable');
     expect(body).toContain('| Licence | met | [evidence](https://github.com/cli/cli/blob/trunk/LICENSE) MIT licence detected |');
     expect(body).toContain('| Licence | unknown | Could not check (rate_limited) |');
   });
@@ -55,5 +55,55 @@ describe('renderReport', () => {
   it('escapes markdown table and HTML characters coming from the registry', () => {
     const nasty = renderReport({ ...report, projects: [{ id: 'x', name: 'A|B <script>', repos: [] }] });
     expect(nasty).toContain('## A\\|B &lt;script&gt;');
+  });
+
+  it('scores against all 12 automatable indicators and counts unknowns separately', () => {
+    const titles = ['Licence', 'CITATION.cff', 'codemeta.json', 'DOI', 'Registry', 'README', 'Install', 'Tests', 'Releases', 'Deps', 'Contributing', 'Activity'];
+    const rules = titles.map((title, i) => ({ indicator: `i${i}`, title }));
+    const states = ['met', 'met', 'unmet', 'unknown', 'met', 'unmet', 'unmet', 'met', 'unknown', 'met', 'unmet', 'met'] as const;
+    const full = renderReport({
+      generated_at: '2026-11-03T02:00:00.000Z',
+      rules,
+      projects: [
+        {
+          id: 'p',
+          name: 'CLE',
+          repos: [
+            {
+              listed: 'cli/cli',
+              repo: { owner: 'cli', name: 'cli', url: 'https://github.com/cli/cli' },
+              results: states.map((state, i) => ({ indicator: `i${i}`, state, evidence_url: null, detail: '' })),
+            },
+          ],
+        },
+      ],
+    });
+    expect(full).toContain('[cli/cli](https://github.com/cli/cli): FAIR evidence 6 of 12 automatable (2 unknown)');
+    expect(full.match(/^\| (?!Indicator|---)/gm)).toHaveLength(12);
+  });
+
+  it('keeps already-encoded evidence URLs intact and escapes only what breaks a markdown link or table', () => {
+    const url = 'https://zenodo.org/search?q=a%3Ab%5C*';
+    const linked = renderReport({
+      ...report,
+      projects: [
+        {
+          id: 'p',
+          name: 'CLE',
+          repos: [
+            {
+              listed: 'cli/cli',
+              repo: { owner: 'cli', name: 'cli', url: 'https://github.com/cli/cli' },
+              results: [
+                { indicator: 'licence', state: 'unmet', evidence_url: url, detail: 'x' },
+                { indicator: 'licence', state: 'unmet', evidence_url: 'https://example.org/a b(c)|d', detail: 'y' },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    expect(linked).toContain(`[evidence](${url}) x`);
+    expect(linked).toContain('[evidence](https://example.org/a%20b%28c%29%7Cd) y');
   });
 });

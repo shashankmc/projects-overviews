@@ -33,10 +33,33 @@ export interface IndicatorResult {
   detail: string;
 }
 
+/** A response from a non-GitHub registry or archive; JSON bodies are parsed, anything else is null. */
+export interface HttpResponse {
+  status: number;
+  data: unknown;
+}
+
+/**
+ * How FAIR rules reach non-GitHub services (Zenodo, PyPI, CRAN, npm, Software
+ * Heritage). Absolute URLs, GET only. Like GitHubClient: non-2xx statuses are
+ * returned, network failures and timeouts throw. Tests inject recorded fixtures;
+ * production uses `createHttpClient` in http.ts.
+ */
+export interface HttpClient {
+  get(url: string): Promise<HttpResponse>;
+}
+
+/** Everything a rule may need besides the repo and GitHub. */
+export interface RuleContext {
+  http: HttpClient;
+  /** The run's clock, so time-based rules are deterministic in tests. */
+  now: Date;
+}
+
 /** One FAIR4RS indicator. Add a module under src/fair/rules/ and list it in rules/index.ts. */
 export interface Rule {
   indicator: string;
   /** Heading shown in the report. */
   title: string;
-  check(repo: RepoRef, gh: GitHubClient): Promise<IndicatorResult>;
+  check(repo: RepoRef, gh: GitHubClient, ctx: RuleContext): Promise<IndicatorResult>;
 }

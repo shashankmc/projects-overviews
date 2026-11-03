@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { runFairCheck } from '../../../src/fair/check.ts';
 import { licence } from '../../../src/fair/rules/licence.ts';
-import type { GitHubClient, Rule } from '../../../src/fair/types.ts';
+import type { GitHubClient, HttpClient, Rule, RuleContext } from '../../../src/fair/types.ts';
 import { fixtureClient } from './fixture-client.ts';
 
 const now = new Date('2026-11-03T02:00:00Z');
@@ -69,5 +69,34 @@ describe('runFairCheck', () => {
       { rules: [slow], now, timeoutMs: 20 },
     );
     expect(report.projects[0]!.repos[0]!.results[0]).toMatchObject({ state: 'unknown', detail: expect.stringContaining('timeout') });
+  });
+
+  it('gives every rule the run clock and the injected non-GitHub client', async () => {
+    const http: HttpClient = { get: async () => ({ status: 200, data: { ok: true } }) };
+    let seen: RuleContext | undefined;
+    const spy: Rule = {
+      indicator: 'spy',
+      title: 'Spy',
+      check: async (_repo, _gh, ctx) => {
+        seen = ctx;
+        return { indicator: 'spy', state: 'met', evidence_url: null, detail: '' };
+      },
+    };
+    await runFairCheck({ projects: [{ id: 'p1', name: 'CLE', repos: ['cli/cli'] }] }, fixtureClient(), { rules: [spy], now, http });
+    expect(seen!.now).toEqual(now);
+    expect(seen!.http).toBe(http);
+  });
+
+  it('never reaches the network for non-GitHub lookups unless a client is injected: they resolve to unknown', async () => {
+    const usesHttp: Rule = {
+      indicator: 'zenodo',
+      title: 'Zenodo',
+      check: async (_repo, _gh, { http }) => {
+        await http.get('https://zenodo.org/api/records');
+        return { indicator: 'zenodo', state: 'met', evidence_url: null, detail: '' };
+      },
+    };
+    const report = await runFairCheck({ projects: [{ id: 'p1', name: 'CLE', repos: ['cli/cli'] }] }, fixtureClient(), { rules: [usesHttp], now });
+    expect(report.projects[0]!.repos[0]!.results[0]!.state).toBe('unknown');
   });
 });

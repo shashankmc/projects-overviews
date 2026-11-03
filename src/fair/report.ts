@@ -10,17 +10,29 @@ function code(text: string): string {
   return '`' + text.replace(/`/g, "'") + '`';
 }
 
+/**
+ * Escapes only what would end a markdown link target or table cell. Evidence
+ * URLs may already be percent-encoded (e.g. Zenodo search queries), so `%` is
+ * left alone rather than re-encoded.
+ */
+function linkTarget(url: string): string {
+  return url.replace(/[\s()<>|]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'));
+}
+
 function cell(r: IndicatorResult): string {
   const detail = md(r.detail);
-  return r.evidence_url ? `[evidence](${encodeURI(r.evidence_url)}) ${detail}` : detail;
+  return r.evidence_url ? `[evidence](${linkTarget(r.evidence_url)}) ${detail}` : detail;
 }
 
 function renderRepo(entry: RepoReport, titles: Map<string, string>): string[] {
   if (!entry.repo) return [`- ${code(entry.listed)}: not a GitHub repo, not checked`, ''];
   const met = entry.results.filter((r) => r.state === 'met').length;
+  const unknown = entry.results.filter((r) => r.state === 'unknown').length;
   const name = `${entry.repo.owner}/${entry.repo.name}`;
+  // Spec E5: "FAIR evidence: n of 12 automatable"; m is the number of automatable rules run (12 in production).
+  const score = `FAIR evidence ${met} of ${entry.results.length} automatable${unknown ? ` (${unknown} unknown)` : ''}`;
   return [
-    `### [${md(name)}](${entry.repo.url}): ${met} of ${entry.results.length} met`,
+    `### [${md(name)}](${entry.repo.url}): ${score}`,
     '',
     '| Indicator | State | Evidence |',
     '|---|---|---|',

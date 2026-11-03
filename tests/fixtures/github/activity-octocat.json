@@ -1,0 +1,28 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/octocat/Hello-World": {
+    "status": 200,
+    "data": {
+      "full_name": "octocat/Hello-World",
+      "html_url": "https://github.com/octocat/Hello-World",
+      "private": false,
+      "default_branch": "master",
+      "homepage": "",
+      "pushed_at": "2024-08-20T23:54:42Z"
+    }
+  },
+  "GET /repos/octocat/Hello-World/commits?sha=master&per_page=1": {
+    "status": 200,
+    "data": [
+      {
+        "sha": "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",
+        "html_url": "https://github.com/octocat/Hello-World/commit/7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",
+        "commit": {
+          "committer": {
+            "date": "2012-03-06T23:06:50Z"
+          }
+        }
+      }
+    ]
+  }
+}

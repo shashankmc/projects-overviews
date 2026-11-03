@@ -1,0 +1,10 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/octocat/this-repo-does-not-exist-xyz/tags?per_page=100": {
+    "status": 404,
+    "data": {
+      "message": "Not Found",
+      "status": "404"
+    }
+  }
+}
