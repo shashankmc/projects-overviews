@@ -4,6 +4,7 @@ import { renderReport } from '../../../src/fair/report.ts';
 
 const report: FairReport = {
   generated_at: '2026-11-03T02:00:00.000Z',
+  internal_errors: [],
   rules: [{ indicator: 'licence', title: 'Licence' }],
   projects: [
     { id: 'p1', name: 'Am AI Right', repos: [] },
@@ -63,6 +64,7 @@ describe('renderReport', () => {
     const states = ['met', 'met', 'unmet', 'unknown', 'met', 'unmet', 'unmet', 'met', 'unknown', 'met', 'unmet', 'met'] as const;
     const full = renderReport({
       generated_at: '2026-11-03T02:00:00.000Z',
+      internal_errors: [],
       rules,
       projects: [
         {

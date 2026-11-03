@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { runFairCheck } from '../../../src/fair/check.ts';
+import { NetworkError } from '../../../src/fair/errors.ts';
 import { licence } from '../../../src/fair/rules/licence.ts';
 import type { GitHubClient, HttpClient, Rule, RuleContext } from '../../../src/fair/types.ts';
 import { fixtureClient } from './fixture-client.ts';
@@ -40,12 +41,12 @@ describe('runFairCheck', () => {
     expect(good!.results[0]!.state).toBe('met');
   });
 
-  it('turns a rule that throws into unknown and keeps going', async () => {
+  it('turns a rule whose network call fails into unknown (network_error) and keeps going', async () => {
     const broken: Rule = {
       indicator: 'broken',
       title: 'Broken',
       check: async () => {
-        throw new Error('socket hang up');
+        throw new NetworkError('socket hang up');
       },
     };
     const report = await runFairCheck(
@@ -58,7 +59,40 @@ describe('runFairCheck', () => {
       ['broken', 'unknown'],
       ['licence', 'met'],
     ]);
-    expect(report.projects[0]!.repos[0]!.results[0]!.detail).not.toContain('socket hang up');
+    expect(report.projects[0]!.repos[0]!.results[0]!.detail).toBe('Could not check (network_error)');
+    expect(report.internal_errors).toEqual([]);
+  });
+
+  it('classifies a fetch that aborted on its own timeout as timeout', async () => {
+    const aborted: Rule = {
+      indicator: 'aborted',
+      title: 'Aborted',
+      check: async () => {
+        throw new DOMException('The operation was aborted due to timeout', 'TimeoutError');
+      },
+    };
+    const report = await runFairCheck({ projects: [{ id: 'p1', name: 'CLE', repos: ['cli/cli'] }] }, fixtureClient(), { rules: [aborted], now });
+    expect(report.projects[0]!.repos[0]!.results[0]!.detail).toBe('Could not check (timeout)');
+    expect(report.internal_errors).toEqual([]);
+  });
+
+  it('records any other thrown error (a bug, an unexpected payload) as internal_error and lists it, without leaking its text', async () => {
+    const buggy: Rule = {
+      indicator: 'buggy',
+      title: 'Buggy',
+      check: async () => {
+        throw new TypeError("Cannot read properties of undefined (reading 'hits')");
+      },
+    };
+    const report = await runFairCheck(
+      { projects: [{ id: 'p1', name: 'CLE', repos: ['cli/cli'] }] },
+      fixtureClient('licence-met'),
+      { rules: [buggy, licence], now },
+    );
+    const results = report.projects[0]!.repos[0]!.results;
+    expect(results[0]).toEqual({ indicator: 'buggy', state: 'unknown', evidence_url: null, detail: 'Could not check (internal_error)' });
+    expect(results[1]!.state).toBe('met');
+    expect(report.internal_errors).toEqual([{ listed: 'cli/cli', indicator: 'buggy' }]);
   });
 
   it('turns a rule that exceeds the timeout into unknown', async () => {

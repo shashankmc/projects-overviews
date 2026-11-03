@@ -27,4 +27,15 @@ describe('createGitHubClient', () => {
     const gh = createGitHubClient({ token: 't', fetch: recordingFetch(404, { message: 'Not Found' }).fetch });
     expect(await gh.request('GET', '/repos/o/r/license')).toEqual({ status: 404, data: { message: 'Not Found' } });
   });
+
+  it('turns a failed fetch into a NetworkError and lets its own timeout through as TimeoutError', async () => {
+    const failing = createGitHubClient({ token: 't', fetch: async () => Promise.reject(new TypeError('fetch failed')) });
+    await expect(failing.request('GET', '/repos/o/r')).rejects.toMatchObject({ name: 'NetworkError' });
+    const slow = createGitHubClient({
+      token: 't',
+      timeoutMs: 20,
+      fetch: (_url, init) => new Promise((_, reject) => init!.signal!.addEventListener('abort', () => reject(init!.signal!.reason))),
+    });
+    await expect(slow.request('GET', '/repos/o/r')).rejects.toMatchObject({ name: 'TimeoutError' });
+  });
 });

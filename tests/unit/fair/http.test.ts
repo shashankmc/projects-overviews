@@ -32,4 +32,10 @@ describe('createHttpClient (non-GitHub registries)', () => {
     });
     await expect(http.get('https://crandb.r-pkg.org/x')).rejects.toMatchObject({ name: 'TimeoutError' });
   });
+
+  it('turns a failed fetch (DNS, reset, TLS) into a NetworkError that keeps the cause', async () => {
+    const cause = new TypeError('fetch failed');
+    const http = createHttpClient({ fetch: async () => Promise.reject(cause) });
+    await expect(http.get('https://pypi.org/pypi/x/json')).rejects.toMatchObject({ name: 'NetworkError', cause });
+  });
 });

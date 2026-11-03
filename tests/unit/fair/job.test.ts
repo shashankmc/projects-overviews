@@ -1,18 +1,28 @@
 import { describe, expect, it } from 'vitest';
+import { NetworkError } from '../../../src/fair/errors.ts';
 import { runFairJob } from '../../../src/fair/job.ts';
-import type { GitHubClient } from '../../../src/fair/types.ts';
+import type { GitHubClient, Rule } from '../../../src/fair/types.ts';
 import { fakeIssuesRepo } from './fake-issues.ts';
 import { fixtureClient } from './fixture-client.ts';
 
 const REPO = 'shashankmc/projects-overviews';
 
-/** Issue calls go to the in-memory fake, everything else to recorded fixtures. */
+/**
+ * Issue calls go to the in-memory fake, everything else to recorded fixtures.
+ * Unrecorded calls fail the way an unreachable GitHub would (NetworkError).
+ */
 function world() {
   const issues = fakeIssuesRepo(REPO);
   const recorded = fixtureClient('licence-met');
   const client: GitHubClient = {
-    request: (method, path, body) =>
-      path.startsWith(`/repos/${REPO}/issues`) ? issues.client.request(method, path, body) : recorded.request(method, path, body),
+    request: async (method, path, body) => {
+      if (path.startsWith(`/repos/${REPO}/issues`)) return issues.client.request(method, path, body);
+      try {
+        return await recorded.request(method, path, body);
+      } catch {
+        throw new NetworkError('unrecorded');
+      }
+    },
   };
   return { client, issues: issues.issues };
 }
@@ -52,5 +62,27 @@ describe('runFairJob (nightly run)', () => {
       'Install instructions', 'Tests/CI', 'Versioned releases', 'Declared dependencies', 'Contributing guide', 'Recent activity']) {
       expect(body).toContain(`| ${title} | `);
     }
+  });
+
+  it('fails loudly on an internal error, but only after writing the issue that shows it', async () => {
+    const w = world();
+    const buggy: Rule = {
+      indicator: 'buggy',
+      title: 'Buggy',
+      check: async () => {
+        throw new TypeError('x is not a function');
+      },
+    };
+    await expect(runFairJob({ registry, gh: w.client, repo: REPO, rules: [buggy], now: new Date('2026-11-03T02:00:00Z') })).rejects.toThrow(
+      'internal_error in 1 check(s): https://github.com/cli/cli buggy',
+    );
+    expect(w.issues).toHaveLength(1);
+    expect(w.issues[0]!.body).toContain('| Buggy | unknown | Could not check (internal_error) |');
+  });
+
+  it('does not fail the run for network errors and timeouts: they are ordinary unknowns', async () => {
+    const w = world();
+    const result = await runFairJob({ registry, gh: w.client, repo: REPO, now: new Date('2026-11-03T02:00:00Z') });
+    expect(result.report.internal_errors).toEqual([]);
   });
 });

@@ -1,4 +1,5 @@
-import { unknownResult } from './errors.ts';
+import { NetworkError, thrownErrorClass, unknownResult, type ErrorClass } from './errors.ts';
+import { DEFAULT_TIMEOUT_MS } from './fetch.ts';
 import type { GitHubClient, HttpClient, IndicatorResult, RepoRef, Rule, RuleContext } from './types.ts';
 
 /** The slice of data/registry.json the FAIR check reads. `repos` is optional until the RSE backfills it. */
@@ -26,6 +27,12 @@ export interface FairReport {
   generated_at: string;
   rules: { indicator: string; title: string }[];
   projects: ProjectReport[];
+  /**
+   * Checks that threw something other than a timeout or network failure (a bug,
+   * an unexpected payload). They read `unknown (internal_error)` in the report;
+   * the job fails the run after writing it.
+   */
+  internal_errors: { listed: string; indicator: string }[];
 }
 
 export interface CheckOptions {
@@ -41,13 +48,12 @@ export interface CheckOptions {
   http?: HttpClient;
 }
 
+/** Behaves like an unreachable network, so the lookup reads unknown (network_error) rather than failing the run. */
 const noHttp: HttpClient = {
   get: async () => {
-    throw new Error('No HttpClient configured');
+    throw new NetworkError('No HttpClient configured');
   },
 };
-
-export const DEFAULT_TIMEOUT_MS = 10_000;
 
 /** Accepts `https://github.com/<owner>/<name>[.git][/]` or `<owner>/<name>`. */
 export function parseRepoRef(listed: string): RepoRef | null {
@@ -57,25 +63,37 @@ export function parseRepoRef(listed: string): RepoRef | null {
   return { owner, name, url: `https://github.com/${owner}/${name}` };
 }
 
-async function runRule(rule: Rule, repo: RepoRef, gh: GitHubClient, ctx: RuleContext, timeoutMs: number): Promise<IndicatorResult> {
+/** Runs one rule under the per-rule timeout; `error` is set when the rule threw or timed out. */
+async function runRule(
+  rule: Rule,
+  repo: RepoRef,
+  gh: GitHubClient,
+  ctx: RuleContext,
+  timeoutMs: number,
+): Promise<{ result: IndicatorResult; error?: ErrorClass }> {
   let timer: NodeJS.Timeout | undefined;
-  const timeout = new Promise<IndicatorResult>((resolve) => {
-    timer = setTimeout(() => resolve(unknownResult(rule.indicator, 'timeout')), timeoutMs);
+  const timeout = new Promise<'timeout'>((resolve) => {
+    timer = setTimeout(() => resolve('timeout'), timeoutMs);
   });
+  let error: ErrorClass;
   try {
-    return await Promise.race([rule.check(repo, gh, ctx), timeout]);
+    const outcome = await Promise.race([rule.check(repo, gh, ctx), timeout]);
+    if (outcome !== 'timeout') return { result: outcome };
+    error = 'timeout';
   } catch (err) {
-    const cls = err instanceof Error && err.name === 'TimeoutError' ? 'timeout' : 'network_error';
-    return unknownResult(rule.indicator, cls);
+    // No catch-all: only timeouts and network failures are expected; anything else is internal_error.
+    error = thrownErrorClass(err);
   } finally {
     clearTimeout(timer);
   }
+  return { result: unknownResult(rule.indicator, error), error };
 }
 
 export async function runFairCheck(registry: RegistryInput, gh: GitHubClient, options: CheckOptions): Promise<FairReport> {
   const { rules, now = new Date(), timeoutMs = DEFAULT_TIMEOUT_MS, http = noHttp } = options;
   const ctx: RuleContext = { http, now };
   const projects: ProjectReport[] = [];
+  const internal_errors: FairReport['internal_errors'] = [];
   for (const project of registry.projects) {
     const repos: RepoReport[] = [];
     for (const listed of project.repos ?? []) {
@@ -85,7 +103,11 @@ export async function runFairCheck(registry: RegistryInput, gh: GitHubClient, op
         continue;
       }
       const results: IndicatorResult[] = [];
-      for (const rule of rules) results.push(await runRule(rule, repo, gh, ctx, timeoutMs));
+      for (const rule of rules) {
+        const { result, error } = await runRule(rule, repo, gh, ctx, timeoutMs);
+        if (error === 'internal_error') internal_errors.push({ listed, indicator: rule.indicator });
+        results.push(result);
+      }
       repos.push({ listed, repo, results });
     }
     projects.push({ id: project.id, name: project.name, repos });
@@ -94,5 +116,6 @@ export async function runFairCheck(registry: RegistryInput, gh: GitHubClient, op
     generated_at: now.toISOString(),
     rules: rules.map(({ indicator, title }) => ({ indicator, title })),
     projects,
+    internal_errors,
   };
 }

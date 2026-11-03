@@ -17,21 +17,45 @@ export interface JobOptions {
   rules?: Rule[];
   now?: Date;
   timeoutMs?: number;
+  /** Render the issue body but write nothing. */
+  dryRun?: boolean;
 }
 
-/** One nightly run: check every listed repo, then upsert the rolling RSE issue. */
-export async function runFairJob(opts: JobOptions): Promise<{ report: FairReport; issue: UpsertOutcome }> {
+export interface JobResult {
+  report: FairReport;
+  body: string;
+  /** Null on a dry run. */
+  issue: UpsertOutcome | null;
+}
+
+/** Thrown after the report is written (or printed) when any check hit an internal_error. */
+export class InternalErrorsFound extends Error {
+  readonly result: JobResult;
+  constructor(result: JobResult) {
+    const where = result.report.internal_errors.map((e) => `${e.listed} ${e.indicator}`).join(', ');
+    super(`internal_error in ${result.report.internal_errors.length} check(s): ${where}`);
+    this.name = 'InternalErrorsFound';
+    this.result = result;
+  }
+}
+
+/**
+ * One nightly run: check every listed repo, then upsert the rolling RSE issue.
+ * Internal errors are shown in the issue as unknown, then fail the run loudly
+ * (throws InternalErrorsFound) so they are never silently absorbed.
+ */
+export async function runFairJob(opts: JobOptions): Promise<JobResult> {
   const report = await runFairCheck(opts.registry, opts.gh, {
     rules: opts.rules ?? defaultRules,
     now: opts.now,
     timeoutMs: opts.timeoutMs,
     http: opts.http,
   });
-  const issue = await upsertIssue(opts.gh, {
-    repo: opts.repo,
-    label: REPORT_LABEL,
-    title: REPORT_TITLE,
-    body: renderReport(report),
-  });
-  return { report, issue };
+  const body = renderReport(report);
+  const issue = opts.dryRun
+    ? null
+    : await upsertIssue(opts.gh, { repo: opts.repo, label: REPORT_LABEL, title: REPORT_TITLE, body });
+  const result = { report, body, issue };
+  if (report.internal_errors.length) throw new InternalErrorsFound(result);
+  return result;
 }
