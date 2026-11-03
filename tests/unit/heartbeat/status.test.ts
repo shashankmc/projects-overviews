@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { NetworkError } from '../../../src/fair/errors.ts';
 import type { GitHubClient, GitHubResponse } from '../../../src/fair/types.ts';
 import { buildHeartbeat } from '../../../src/heartbeat/status.ts';
 
@@ -64,8 +65,8 @@ describe('buildHeartbeat', () => {
     });
   });
 
-  it('still produces a heartbeat when the API call throws', async () => {
-    const gh = clientReturning(new Error('getaddrinfo ENOTFOUND api.github.com'));
+  it('still produces a heartbeat when the API is unreachable', async () => {
+    const gh = clientReturning(new NetworkError('fetch failed', { cause: new Error('getaddrinfo ENOTFOUND api.github.com') }));
     expect(await buildHeartbeat({ gh, repo: 'o/r', now: NOW })).toEqual({
       generated_at: '2026-11-03T04:05:06.000Z',
       fair_last_run: { result: 'unknown', error: 'network_error', run_id: null, started_at: null, url: null },
@@ -75,5 +76,10 @@ describe('buildHeartbeat', () => {
   it('classifies a timed-out API call as timeout', async () => {
     const gh = clientReturning(new DOMException('The operation was aborted due to timeout', 'TimeoutError'));
     expect((await buildHeartbeat({ gh, repo: 'o/r', now: NOW })).fair_last_run.error).toBe('timeout');
+  });
+
+  it('still produces a heartbeat on an unexpected error, recording it as internal_error', async () => {
+    const gh = clientReturning(new TypeError('x is not a function'));
+    expect((await buildHeartbeat({ gh, repo: 'o/r', now: NOW })).fair_last_run.error).toBe('internal_error');
   });
 });

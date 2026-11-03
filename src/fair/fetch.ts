@@ -1,6 +1,6 @@
 // Leaf module shared by the GitHub and non-GitHub clients (and src/heartbeat).
 // Keep its imports to errors.ts/types.ts: heartbeat.yml runs without `npm ci`.
-import { NetworkError } from './errors.ts';
+import { NetworkError, thrownErrorClass } from './errors.ts';
 import type { HttpResponse } from './types.ts';
 
 /** Spec: 10 s per external call. */
@@ -28,7 +28,7 @@ export async function fetchJson(
     status = res.status;
     text = await res.text();
   } catch (err) {
-    if ((err as { name?: unknown } | null)?.name === 'TimeoutError') throw err;
+    if (thrownErrorClass(err) === 'timeout') throw err;
     throw new NetworkError('fetch failed', { cause: err });
   }
   let data: unknown = null;

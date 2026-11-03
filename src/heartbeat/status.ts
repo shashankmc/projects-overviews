@@ -1,4 +1,5 @@
-import { errorClassOf, type ErrorClass } from '../fair/errors.ts';
+import { errorClassOf, thrownErrorClass, type ErrorClass } from '../fair/errors.ts';
+import { isOk } from '../fair/fetch.ts';
 import type { GitHubClient } from '../fair/types.ts';
 
 /** Contents of status/heartbeat.json, committed weekly by .github/workflows/heartbeat.yml. */
@@ -40,11 +41,10 @@ export async function buildHeartbeat({ gh, repo, now }: HeartbeatOptions): Promi
       `/repos/${repo}/actions/workflows/fair.yml/runs?status=completed&per_page=1&exclude_pull_requests=true`,
     );
   } catch (err) {
-    // The keep-alive commit must not depend on the API; record why the result is missing.
-    const cls = err instanceof Error && err.name === 'TimeoutError' ? 'timeout' : 'network_error';
-    return { generated_at, fair_last_run: unknownRun(cls) };
+    // The keep-alive commit must not depend on the API, so even internal_error is recorded, not thrown.
+    return { generated_at, fair_last_run: unknownRun(thrownErrorClass(err)) };
   }
-  if (res.status < 200 || res.status >= 300) {
+  if (!isOk(res)) {
     return { generated_at, fair_last_run: unknownRun(errorClassOf(res)) };
   }
   const run = (res.data as { workflow_runs: WorkflowRun[] }).workflow_runs[0];

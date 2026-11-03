@@ -6,15 +6,18 @@ export interface RepoRef {
   url: string;
 }
 
-export interface GitHubResponse {
+/** An HTTP answer from GitHub or any other service; JSON bodies are parsed, anything else is null. */
+export interface HttpResponse {
   status: number;
   data: unknown;
 }
 
+export type GitHubResponse = HttpResponse;
+
 /**
  * The only way FAIR code talks to GitHub. Paths are REST paths relative to the
  * API root, e.g. `/repos/cli/cli/license`. Non-2xx statuses are returned, not
- * thrown; network failures and timeouts throw. Tests inject a recorded-fixture
+ * thrown; network failures throw NetworkError and timeouts TimeoutError. Tests inject a recorded-fixture
  * client; production uses `createGitHubClient` in github.ts.
  */
 export interface GitHubClient {
@@ -31,12 +34,6 @@ export interface IndicatorResult {
   evidence_url: string | null;
   /** Short human-readable explanation shown in the report. */
   detail: string;
-}
-
-/** A response from a non-GitHub registry or archive; JSON bodies are parsed, anything else is null. */
-export interface HttpResponse {
-  status: number;
-  data: unknown;
 }
 
 /**

@@ -1,3 +1,4 @@
+import { isOk } from './fetch.ts';
 import type { GitHubClient, GitHubResponse } from './types.ts';
 
 export interface IssueTarget {
@@ -15,7 +16,7 @@ export interface UpsertOutcome {
 }
 
 function ok(res: GitHubResponse, what: string): unknown {
-  if (res.status < 200 || res.status >= 300) throw new Error(`GitHub ${what} failed with HTTP ${res.status}`);
+  if (!isOk(res)) throw new Error(`GitHub ${what} failed with HTTP ${res.status}`);
   return res.data;
 }
 

@@ -38,7 +38,7 @@ describe('registry presence rule', () => {
 
   it('does not count same-named packages that do not point back', async () => {
     const lookups = registryLookups(repo('psf', 'requests'));
-    const http = overridingHttp(fixtureHttp('registry-psf-requests'), { [`GET ${lookups.pypi}`]: missing, [`GET ${lookups.swh}`]: missing });
+    const http = overridingHttp(fixtureHttp('registry-psf-requests'), { [`GET ${lookups.pypi.url}`]: missing, [`GET ${lookups.swh.url}`]: missing });
     // npm "requests" exists but points at unshiftio/requests.
     const result = await check('psf', 'requests', http);
     expect(result.state).toBe('unmet');
@@ -54,7 +54,7 @@ describe('registry presence rule', () => {
 
   it('is unknown, not unmet, when a lookup errors and nothing else matched', async () => {
     const { swh } = registryLookups(repo('octocat', 'this-repo-does-not-exist-xyz'));
-    const http = overridingHttp(fixtureHttp('registry-repo-not-found'), { [`GET ${swh}`]: { status: 503, data: null } });
+    const http = overridingHttp(fixtureHttp('registry-repo-not-found'), { [`GET ${swh.url}`]: { status: 503, data: null } });
     const result = await check('octocat', 'this-repo-does-not-exist-xyz', http);
     expect(result).toMatchObject({ state: 'unknown', evidence_url: null, detail: expect.stringContaining('server_error') });
   });
@@ -64,7 +64,7 @@ describe('registry presence rule', () => {
     const base = fixtureHttp('registry-psf-requests');
     const http: HttpClient = {
       get: async (url) => {
-        if (url === npm) throw new NetworkError('fetch failed');
+        if (url === npm.url) throw new NetworkError('fetch failed');
         return base.get(url);
       },
     };
@@ -76,7 +76,7 @@ describe('registry presence rule', () => {
     const base = fixtureHttp('registry-psf-requests');
     const http: HttpClient = {
       get: async (url) => {
-        if (url === npm) throw new TypeError('x is not a function');
+        if (url === npm.url) throw new TypeError('x is not a function');
         return base.get(url);
       },
     };
@@ -88,7 +88,7 @@ describe('registry presence rule', () => {
     const base = fixtureHttp('registry-repo-not-found');
     const http: HttpClient = {
       get: async (url) => {
-        if (url === swh) throw new DOMException('The operation was aborted due to timeout', 'TimeoutError');
+        if (url === swh.url) throw new DOMException('The operation was aborted due to timeout', 'TimeoutError');
         return base.get(url);
       },
     };
