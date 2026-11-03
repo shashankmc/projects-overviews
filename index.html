@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-6Iz0R5uCuzSlWxPFLN3FBKQ4iMvAKwIJd5rVGt6MPKY='; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Legal NLP Projects — Uses & Relations</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1e2340; --line:#2b3157; --line2:#3a4170;
+    --ink:#e8eaf6; --muted:#9aa3c7; --muted2:#6b73a0;
+    --data:#f5b544; --technique:#ff6b8b; --component:#4aa3ff;
+    --research:#4aa3ff; --software:#a3e635;
+    --weak:#6b73a0; --strong:#4aa3ff; --supply:#22d3ee;
+    --accent:#4aa3ff; --warn:#f5b544; --shadow:0 6px 24px rgba(0,0,0,.35); --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  button{font:inherit;cursor:pointer;color:inherit}
+  h1,h2,h3{margin:0;font-weight:650}
+  .app{display:flex;flex-direction:column;height:100vh}
+  header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  header .title{display:flex;flex-direction:column;line-height:1.1}
+  header .title b{font-size:16px}header .title span{font-size:11px;color:var(--muted)}
+  .tabs{display:flex;gap:4px;margin-left:6px}
+  .tab{padding:7px 14px;border:1px solid var(--line);background:transparent;border-radius:999px;color:var(--muted);font-size:13px}
+  .tab.active{background:var(--panel2);color:var(--ink);border-color:var(--line2)}
+  .spacer{flex:1}
+  select,input[type=text]{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:6px 9px;font:inherit}
+  select:focus,input:focus{outline:2px solid var(--accent)}
+  .btn{padding:7px 12px;border:1px solid var(--line2);background:var(--panel2);border-radius:8px;font-size:13px}
+  .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#07142b;font-weight:650}
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:3px 9px;font-size:12px}
+  .btn.danger:hover{border-color:var(--technique);color:var(--technique)}
+  .appbody{flex:1;display:flex;min-height:0}
+  .view{flex:1;min-height:0;display:none;flex-direction:column;background:radial-gradient(circle at 20% 0%,#141834,transparent 60%),var(--bg)}
+  .view.active{display:flex}
+  .scroll{flex:1;min-height:0;overflow-y:auto;padding:18px}
+  /* Projects tab */
+  .projlayout{display:flex;gap:0;height:100%}
+  .plist{width:250px;border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column}
+  .plist-h{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .plist-h h3{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .plist-body{overflow:auto;padding:8px}
+  .pitem{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;border:1px solid transparent;cursor:pointer;margin-bottom:4px}
+  .pitem:hover{background:var(--panel2)}
+  .pitem.active{background:var(--panel2);border-color:var(--line2)}
+  .pitem .tt{width:9px;height:9px;border-radius:50%;flex:none}
+  .pitem .nm{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pitem .u{font-size:10px;color:var(--muted2)}
+  .pdetail{flex:1;overflow:auto;padding:18px}
+  .pdetail-h{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .pdetail-h b{font-size:18px}
+  .type-toggle{display:flex;gap:3px;border:1px solid var(--line2);border-radius:999px;padding:2px}
+  .type-toggle button{border:none;background:transparent;color:var(--muted);border-radius:999px;padding:4px 12px;font-size:12px}
+  .type-toggle button.active[data-t=research]{background:var(--research);color:#07142b;font-weight:650}
+  .type-toggle button.active[data-t=software]{background:var(--software);color:#07142b;font-weight:650}
+  .rowsec{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:16px;overflow:hidden}
+  .rowsec>.h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .rowsec>.h .kd{width:11px;height:11px;border-radius:3px}
+  .rowsec>.h b{font-size:14px;flex:1}
+  .rowsec>.h small{color:var(--muted2);font-size:11px}
+  .rowtable{width:100%;border-collapse:collapse}
+  .rowtable th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted2);padding:7px 14px;font-weight:600}
+  .rowtable td{padding:5px 14px;border-top:1px solid var(--line)}
+  .rowtable select{width:100%;min-width:120px}
+  .rowtable .rm{border:none;background:transparent;color:var(--muted2);font-size:14px;padding:3px 7px;border-radius:6px}
+  .rowtable .rm:hover{background:var(--technique);color:#fff}
+  .addrow{padding:9px 14px;border-top:1px solid var(--line)}
+  .badge-shared{font-size:9.5px;color:var(--warn);border:1px solid var(--warn);border-radius:6px;padding:0 5px;margin-left:6px}
+  .fromtag{color:var(--supply);font-size:11px;font-weight:600;margin-right:6px}
+  .techcell{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .tchip{display:inline-flex;align-items:center;gap:2px;font-size:11px;border:1px solid var(--technique);color:var(--technique);border-radius:7px;padding:1px 3px 1px 7px;white-space:nowrap}
+  .tchip button{border:none;background:transparent;color:var(--technique);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;border-radius:4px}
+  .tchip button:hover{background:var(--technique);color:#fff}
+  .techcell .techadd,.techcell .dataadd{min-width:112px;padding:4px 6px}
+  .dchip{display:inline-flex;align-items:center;gap:2px;font-size:11px;border:1px solid var(--data);color:var(--data);border-radius:7px;padding:1px 3px 1px 7px;white-space:nowrap}
+  .dchip button{border:none;background:transparent;color:var(--data);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;border-radius:4px}
+  .dchip button:hover{background:var(--data);color:#3a2c00}
+  .empty{color:var(--muted2);font-size:12px;padding:12px 14px}
+  /* Relations */
+  .checks{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12.5px;margin-bottom:14px}
+  .checks label{display:flex;align-items:center;gap:6px;cursor:pointer}
+  .rb{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px}
+  .rb.weak{background:rgba(107,115,160,.25);color:var(--muted)}
+  .rb.moderate{background:rgba(245,181,68,.18);color:var(--warn)}
+  .rb.strong{background:rgba(74,163,255,.18);color:var(--strong)}
+  .rb.supply{background:rgba(34,211,238,.16);color:var(--supply)}
+  .pill{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+  .graph-wrap{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;margin-bottom:16px}
+  .edgetable{width:100%;border-collapse:collapse;font-size:12.5px}
+  .edgetable th,.edgetable td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .edgetable th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+  .combo{display:inline-flex;flex-wrap:wrap;gap:4px}
+  .ct{font-size:11px;border:1px solid var(--line2);border-radius:6px;padding:1px 6px;background:var(--panel2)}
+  .ct .d{color:var(--data)}.ct .t{color:var(--technique)}
+  .empty-big{text-align:center;color:var(--muted);padding:36px;border:1px dashed var(--line2);border-radius:12px}
+  /* Catalogue */
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .catbox{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+  .catbox>.h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .catbox>.h .kd{width:11px;height:11px;border-radius:3px}.catbox>.h b{flex:1;font-size:14px}
+  .catbox>.body{padding:10px 12px}
+  .citem{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:8px;font-size:12.5px}
+  .citem:hover{background:var(--panel2)}
+  .citem .nm{flex:1}
+  .citem.sub{margin-left:18px;font-size:12px;color:var(--muted)}
+  .citem .mini{display:flex;gap:2px}
+  .citem .mini button{border:1px solid var(--line2);background:var(--panel);color:var(--muted);border-radius:6px;padding:1px 6px;font-size:11px}
+  .citem .mini button:hover{background:var(--line2);color:var(--ink);border-color:var(--accent)}
+  .citem .use{font-size:10px;color:var(--muted2)}
+  .addline{margin-top:8px;display:flex;gap:6px}
+  .addline input{flex:1}
+  .sub-note{color:var(--muted);margin:0 0 16px;font-size:13px;max-width:900px}
+  h2.vh{margin-bottom:4px}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line2);padding:9px 16px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1}
+  .modal-bg{position:fixed;inset:0;background:rgba(4,6,16,.66);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal-bg.show{display:flex}
+  .modal{width:420px;max-width:92vw;background:var(--panel);border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .modal .mh{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:650}
+  .modal .mb{padding:16px;display:flex;flex-direction:column;gap:10px}
+  .modal label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+  .modal .mf{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+  textarea{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:8px;font:inherit}
+  /* relations matrix */
+  .relmatrix{border-collapse:collapse;font-size:12px;margin-bottom:8px}
+  .relmatrix th,.relmatrix td{border:1px solid var(--line);text-align:center}
+  .relmatrix th{background:var(--panel2);color:var(--muted);font-size:11px;height:28px;min-width:30px}
+  .relmatrix th.corner{text-align:left;padding:0 10px;color:var(--muted2);font-weight:600;white-space:nowrap}
+  .relmatrix td.rowh{text-align:left;white-space:nowrap;padding:0 12px;height:30px;background:var(--panel);color:var(--ink)}
+  .relmatrix td.rowh .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle}
+  .relmatrix td.mcell{width:34px;height:30px;font-size:15px;line-height:1}
+  .relmatrix td.diag{background:repeating-linear-gradient(45deg,var(--panel2),var(--panel2) 5px,transparent 5px,transparent 10px)}
+  .sarrow{color:var(--supply);font-weight:700}
+  .tglyph{font-weight:700}
+  .mlegend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .mlegend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:5px}
+  .rb.shares{background:rgba(154,163,199,.2);color:var(--ink)}
+  .lvl{font-size:9.5px;padding:1px 7px;border-radius:999px;border:1px solid var(--line2);color:var(--muted2);margin-left:2px}
+  .lvl.strong{color:var(--strong);border-color:var(--strong)}
+  .lvl.moderate{color:var(--warn);border-color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="title"><b>Legal NLP Projects — Uses &amp; Relations</b><span>Each project declares what it uses &amp; produces · shared uses reveal how projects relate</span></div>
+    <div class="tabs">
+      <button class="tab active" data-view="projects">Projects</button>
+      <button class="tab" data-view="relations">Relations</button>
+      <button class="tab" data-view="catalogue">Catalogue</button>
+    </div>
+    <div class="spacer"></div>
+  </header>
+
+  <div class="appbody">
+    <!-- PROJECTS -->
+    <main class="view active" id="v_projects">
+      <div class="projlayout">
+        <aside class="plist">
+          <div class="plist-h"><h3>Projects</h3></div>
+          <div class="plist-body" id="projList"></div>
+        </aside>
+        <section class="pdetail" id="projDetail"></section>
+      </div>
+    </main>
+    <!-- RELATIONS -->
+    <main class="view" id="v_relations"><div class="scroll" id="relBody"></div></main>
+    <!-- CATALOGUE -->
+    <main class="view" id="v_catalogue"><div class="scroll" id="catBody"></div></main>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ================= STATE ================= */
+/* The prototype's storage key. Kept unchanged for reference: the published page deliberately never reads or writes it. */
+const LS_KEY="legal_nlp_uses_v3";
+let D;
+function normalize(p){(p.projects||[]).forEach(pr=>{['uses','produces'].forEach(w=>{(pr[w]||[]).forEach(r=>{if(r.src)return;if(r.techs===undefined)r.techs=r.tech?[r.tech]:[];delete r.tech;if(r.datas===undefined)r.datas=r.data?[r.data]:[];delete r.data;});});});return p;}
+/* Published data in git is the single source of truth (D20/D5): fetched over HTTP on startup. */
+const DATA_URL="data/registry.json";
+async function load(){const res=await fetch(DATA_URL,{cache:"no-store"});if(!res.ok)throw new Error("HTTP "+res.status);return normalize(await res.json());}
+
+/* ================= HELPERS ================= */
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function proj(){return D.projects.find(p=>p.id===D.current)||D.projects[0];}
+const tech=id=>D.techniques.find(t=>t.id===id);
+function compLeaf(id){for(const c of D.components){if(c.id===id)return{cls:c,sub:null};const s=(c.subs||[]).find(x=>x.id===id);if(s)return{cls:c,sub:s};}return null;}
+function compName(id){const l=compLeaf(id);return l?(l.sub?l.cls.name+' – '+l.sub.name:l.cls.name):'?';}
+function dataInfo(id){for(const ds of D.dataSources){if(ds.id===id)return{cls:ds,sub:null};const s=(ds.subs||[]).find(x=>x.id===id);if(s)return{cls:ds,sub:s};}return null;}
+function dataLabel(id){const di=dataInfo(id);return di?(di.sub?di.cls.name+'–'+di.sub.name:di.cls.name):'';}
+/* a Uses row may reference another project's Produces row via .src.
+   .src.data (optional) narrows to a specific configuration (single data sub-class) of that produced row. */
+function resolveRow(r){if(r&&r.src){const p=D.projects.find(x=>x.id===r.src.proj);const pr=p&&(p.produces||[]).find(x=>x.id===r.src.row);if(!pr)return null;if(r.src.data)return {id:pr.id,comp:pr.comp,datas:[r.src.data],techs:pr.techs||[]};return pr;}return r;}
+function techNames(ids){return (ids||[]).map(id=>{const t=tech(id);return t?t.name:null;}).filter(Boolean);}
+function dataNames(ids){return (ids||[]).map(dataLabel).filter(Boolean);}
+function comboLabel(r){if(!r)return '<span class="ct">(removed)</span>';let h='<span class="ct">'+esc(compName(r.comp));const dl=dataNames(r.datas);if(dl.length)h+=' · <span class="d">'+esc(dl.join(', '))+'</span>';const ts=techNames(r.techs);if(ts.length)h+=' · <span class="t">'+esc(ts.join(', '))+'</span>';h+='</span>';return h;}
+function splitKey(k){const i=k.indexOf('|');return [k.slice(0,i),k.slice(i+1)];}
+function typeColor(t){return t==="research"?"var(--research)":"var(--software)";}
+
+/* how many projects reference a component class or sub-class (uses resolved + produces) */
+function compUsage(cid){const c=D.components.find(x=>x.id===cid);let ids=[cid];if(c&&c.subs)ids=ids.concat(c.subs.map(s=>s.id));let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>ids.includes(r.comp)))n++;}return n;}
+/* is a given use-row's component shared with another project? (weakest level) */
+function rowShared(pid,r){const rr=resolveRow(r);if(!rr)return false;for(const p of D.projects){if(p.id===pid)continue;if(p.uses.some(x=>{const xx=resolveRow(x);return xx&&xx.comp===rr.comp;}))return true;}return false;}
+
+/* ================= RELATIONS ENGINE =================
+   Three tie levels (nested):
+   weak     = share a component sub-class            (comp)
+   moderate = share component × data sub-class        (comp × data)
+   strong   = also share a technique                  (comp × data × technique)
+   A pair's tie type is the strongest level it reaches on any shared combination. */
+function projInfo(p){
+  const comps=new Set(); const md=new Map(); // md: "comp|data" -> Set(techIds), one entry per data sub-class
+  p.uses.forEach(r=>{const rr=resolveRow(r);if(!rr)return;comps.add(rr.comp);(rr.datas||[]).forEach(d=>{if(!d)return;const k=rr.comp+'|'+d;if(!md.has(k))md.set(k,new Set());(rr.techs||[]).forEach(t=>md.get(k).add(t));});});
+  return {comps,md};
+}
+function computeTies(){
+  const ps=D.projects, ties=[], info=ps.map(projInfo);
+  const rank={weak:1,moderate:2,strong:3};
+  for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){
+    const A=info[i],B=info[j], combos=[], mdComps=new Set();
+    let hasWeak=false,hasModerate=false,hasStrong=false;
+    // moderate / strong: shared comp×data
+    [...A.md.keys()].filter(k=>B.md.has(k)).forEach(k=>{
+      const inter=[...A.md.get(k)].filter(t=>B.md.get(k).has(t)); const [comp,data]=splitKey(k); mdComps.add(comp);
+      if(inter.length){hasStrong=true;combos.push({comp,data,techs:inter,level:'strong'});}
+      else{hasModerate=true;combos.push({comp,data,techs:[],level:'moderate'});}
+    });
+    // weak: shared component sub-classes not already captured by a moderate/strong combo
+    [...A.comps].filter(c=>B.comps.has(c)).forEach(c=>{ if(!mdComps.has(c)){hasWeak=true;combos.push({comp:c,data:'',techs:[],level:'weak'});} });
+    if(!combos.length) continue;
+    const type=hasStrong?'strong':(hasModerate?'moderate':'weak');
+    combos.sort((x,y)=>rank[y.level]-rank[x.level]);
+    ties.push({a:ps[i].id,b:ps[j].id,type,combos});
+  }
+  return ties;
+}
+/* keys a row occupies: comp|data per data sub-class, or comp| when it has no data */
+function rowKeys(r){const ds=(r.datas||[]).filter(Boolean);return ds.length?ds.map(d=>r.comp+'|'+d):[r.comp+'|'];}
+function computeSupply(){
+  const ps=D.projects,out=[];
+  for(const a of ps){ if(!a.produces.length)continue;
+    const pk=new Set(); a.produces.forEach(r=>rowKeys(r).forEach(k=>pk.add(k)));
+    for(const b of ps){ if(a===b)continue;
+      const via=b.uses.map(resolveRow).filter(r=>r&&rowKeys(r).some(k=>pk.has(k)));
+      if(via.length) out.push({from:a.id,to:b.id,combos:via});
+    }
+  }
+  return out;
+}
+
+/* ================= PROJECTS TAB ================= */
+function renderProjectList(){
+  const el=document.getElementById('projList'); el.innerHTML='';
+  D.projects.forEach(p=>{
+    const div=document.createElement('div'); div.className='pitem'+(p.id===D.current?' active':'');
+    div.innerHTML='<span class="tt" style="background:'+typeColor(p.type)+'"></span><span class="nm">'+esc(p.name)+'</span><span class="u">'+p.produces.length+'p · '+p.uses.length+'u</span>';
+    div.onclick=()=>{D.current=p.id;renderProjectList();renderProjectDetail();};
+    el.appendChild(div);
+  });
+}
+/* read-only chips for a row's data sub-classes and techniques */
+function dataChips(r){return (r.datas||[]).map(id=>'<span class="dchip">'+esc(dataLabel(id)||'?')+'</span>').join(' ');}
+function techChips(r){return (r.techs||[]).map(id=>{const t=tech(id);return '<span class="tchip">'+esc(t?t.name:'?')+'</span>';}).join(' ');}
+function rowTable(p,which){
+  const rows=p[which];
+  let h='<table class="rowtable"><thead><tr><th style="width:34%">Component (tool)</th><th style="width:36%">Data sub-class(es)</th><th style="width:30%">Technique(s)</th></tr></thead><tbody>';
+  if(!rows.length) h+='<tr><td colspan="3" class="empty">None declared.</td></tr>';
+  rows.forEach(r=>{
+    if(which==='uses'&&r.src){
+      const rr=resolveRow(r); const srcP=D.projects.find(x=>x.id===r.src.proj); const srcLbl=r.src.proj===D.current?'this project':(srcP?srcP.name:'?');
+      h+='<tr><td colspan="3"><span class="fromtag">↳ from '+esc(srcLbl)+':</span> '+comboLabel(rr)+'</td></tr>';
+      return;
+    }
+    const shared=(which==='uses')&&rowShared(p.id,r);
+    h+='<tr><td>'+esc(compName(r.comp))+(shared?'<span class="badge-shared" title="Shared with another project">shared</span>':'')+'</td>'+
+       '<td><div class="techcell">'+dataChips(r)+'</div></td>'+
+       '<td><div class="techcell">'+techChips(r)+'</div></td></tr>';
+  });
+  h+='</tbody></table>';
+  return h;
+}
+function renderProjectDetail(){
+  const el=document.getElementById('projDetail'); const p=proj();
+  el.innerHTML=
+    '<div class="pdetail-h"><b id="pname">'+esc(p.name)+'</b>'+
+    '<span class="pill" style="border-color:'+typeColor(p.type)+'">'+(p.type==='research'?'Research':'Software')+'</span></div>'+
+    (p.description?'<p class="sub-note pdesc">'+esc(p.description)+'</p>':'')+
+    '<div class="rowsec"><div class="h"><span class="kd" style="background:var(--supply,#22d3ee)"></span><b>Produces</b><small>what this project outputs (may feed other projects)</small></div>'+rowTable(p,'produces')+'</div>'+
+    '<div class="rowsec"><div class="h"><span class="kd" style="background:var(--component)"></span><b>Uses</b><small>component (+ data sub-class + technique), or another project’s output</small></div>'+rowTable(p,'uses')+'</div>'+
+    '<p class="sub-note">Relations are computed from these rows: a <b>weak tie</b> shares a component sub-class; a <b>moderate tie</b> shares component × data sub-class; a <b>strong tie</b> also shares a technique; a <b>supply</b> is one project producing what another uses. This page is read-only: changes are made by pull request to <code>data/registry.json</code>.</p>';
+}
+
+/* ================= RELATIONS TAB ================= */
+let relFilter={weak:true,moderate:true,strong:true,supply:true};
+const rankOf={weak:1,moderate:2,strong:3};
+function renderRelations(){
+  const b=document.getElementById('relBody');
+  const ties=computeTies(), supply=computeSupply();
+  let h='<h2 class="vh">Relations</h2><p class="sub-note">Nothing is drawn by hand. Every tie is derived from the projects’ rows. <b>Weak</b> = shared component sub-class. <b>Moderate</b> = shared component × data sub-class. <b>Strong</b> = also share a technique. <b>Supply</b> = one project produces what another uses.</p>';
+  h+='<div class="checks"><span class="pill">'+D.projects.length+' projects</span>'+
+    '<label><input type="checkbox" id="f_weak" '+(relFilter.weak?'checked':'')+'> <span class="rb weak">weak tie</span></label>'+
+    '<label><input type="checkbox" id="f_moderate" '+(relFilter.moderate?'checked':'')+'> <span class="rb moderate">moderate tie</span></label>'+
+    '<label><input type="checkbox" id="f_strong" '+(relFilter.strong?'checked':'')+'> <span class="rb strong">strong tie</span></label>'+
+    '<label><input type="checkbox" id="f_supply" '+(relFilter.supply?'checked':'')+'> <span class="rb supply">supply →</span></label></div>';
+  const showTies=ties.filter(t=>relFilter[t.type]);
+  const showSupply=relFilter.supply?supply:[];
+  if(!showTies.length&&!showSupply.length){
+    h+='<div class="empty-big">No relations to show.</div>';
+    b.innerHTML=h; wireRel(); return;
+  }
+  const cnt={strong:0,moderate:0,weak:0}; showTies.forEach(t=>cnt[t.type]++);
+  h+='<div class="checks" style="margin:-4px 0 12px"><span class="pill"><b style="color:var(--strong)">'+cnt.strong+'</b> strong</span><span class="pill"><b style="color:var(--warn)">'+cnt.moderate+'</b> moderate</span><span class="pill">'+cnt.weak+' weak</span><span class="pill"><b style="color:var(--supply)">'+showSupply.length+'</b> supply</span></div>';
+  h+='<p class="sub-note" style="margin:0 0 8px">Each cell is the relationship between the <b>row</b> project and the <b>column</b> project. <span class="sarrow">▸</span> = the <b>row supplies the column</b> (produces what it uses); <span class="tglyph" style="color:var(--strong)">↔</span> = they <b>share</b> a component/data configuration. <b>Hover a cell</b> to see exactly what is shared or supplied. (Tie strength is shown only as a faint tint — secondary.)</p>';
+  h+=relMatrix(showTies,showSupply);
+  h+='<h3 style="margin:20px 0 8px;font-size:14px">Details</h3>';
+  h+='<table class="edgetable"><thead><tr><th>Project A</th><th>Relation</th><th>Project B</th><th>Shared combination(s)</th></tr></thead><tbody>';
+  showSupply.forEach(s=>{
+    const combos=s.combos.map(r=>comboLabel(r)).join(' ');
+    h+='<tr><td><b>'+esc(pn(s.from))+'</b></td><td><span class="rb supply">supplies ▶</span></td><td><b>'+esc(pn(s.to))+'</b></td><td><span class="combo">'+combos+'</span></td></tr>';
+  });
+  showTies.slice().sort((x,y)=>rankOf[y.type]-rankOf[x.type]).forEach(t=>{
+    const combos=t.combos.map(c=>{let s='<span class="ct" title="'+c.level+' match">'+esc(compName(c.comp));if(c.data){const dl=dataLabel(c.data);if(dl)s+=' · <span class="d">'+esc(dl)+'</span>';}if(c.level==='strong'&&c.techs.length)s+=' · <span class="t">'+esc(techNames(c.techs).join(', '))+'</span>';s+='</span>';return s;}).join(' ');
+    h+='<tr><td><b>'+esc(pn(t.a))+'</b></td><td><span class="rb shares">shares</span> <span class="lvl '+t.type+'">'+t.type+'</span></td><td><b>'+esc(pn(t.b))+'</b></td><td><span class="combo">'+combos+'</span></td></tr>';
+  });
+  h+='</tbody></table>';
+  b.innerHTML=h;
+  wireRel();
+}
+function pn(id){const p=D.projects.find(x=>x.id===id);return p?p.name:id;}
+function wireRel(){const m={f_weak:'weak',f_moderate:'moderate',f_strong:'strong',f_supply:'supply'};Object.keys(m).forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=()=>{relFilter[m[id]]=el.checked;renderRelations();};});}
+function comboPlain(c){let s=compName(c.comp);if(c.data)s+=' · '+dataLabel(c.data);if(c.level==='strong'&&c.techs&&c.techs.length)s+=' · '+techNames(c.techs).join(', ');return s;}
+function relMatrix(ties,supply){
+  const ps=D.projects;
+  const tieOf={}; ties.forEach(t=>{tieOf[t.a+'|'+t.b]=t;tieOf[t.b+'|'+t.a]=t;});
+  const supOf={}; supply.forEach(s=>{supOf[s.from+'|'+s.to]=s;});
+  const tint={weak:'rgba(107,115,160,.16)',moderate:'rgba(245,181,68,.15)',strong:'rgba(74,163,255,.17)'};
+  const tgc={weak:'#9aa3c7',moderate:'#f5b544',strong:'#4aa3ff'};
+  let h='<div style="overflow:auto"><table class="relmatrix"><thead><tr><th class="corner">row → column</th>';
+  ps.forEach((p,i)=>{h+='<th title="'+esc(p.name)+'">'+(i+1)+'</th>';});
+  h+='</tr></thead><tbody>';
+  ps.forEach((r,ri)=>{
+    h+='<tr><td class="rowh" title="'+esc(r.name)+'"><span class="dot" style="background:'+typeColor(r.type)+'"></span>'+(ri+1)+'. '+esc(r.name)+'</td>';
+    ps.forEach((c,ci)=>{ if(ri===ci){h+='<td class="diag"></td>';return;}
+      const t=tieOf[r.id+'|'+c.id], sup=supOf[r.id+'|'+c.id]; const title=[]; let glyph='';
+      if(sup){glyph+='<span class="sarrow">▸</span>';title.push(esc(r.name)+' supplies '+esc(c.name)+': '+esc(sup.combos.map(x=>compName(x.comp)+(dataNames(x.datas).length?' · '+dataNames(x.datas).join(', '):'')).join(' ; ')));}
+      if(t){glyph+='<span class="tglyph" style="color:'+tgc[t.type]+'">↔</span>';title.push(esc(r.name)+' shares with '+esc(c.name)+' ('+t.type+'): '+esc(t.combos.map(comboPlain).join(' ; ')));}
+      const bg=t?('background:'+tint[t.type]+';'):'';
+      h+='<td class="mcell" style="'+bg+'" title="'+title.join('  |  ')+'">'+glyph+'</td>';
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>';
+  h+='<div class="mlegend"><span><span class="sarrow">▸</span> supplies (row → column)</span><span><span class="tglyph" style="color:var(--strong)">↔</span> shares a configuration</span><span class="muted" style="font-size:11px">faint tint = tie strength (secondary)</span></div>';
+  return h;
+}
+
+/* ================= CATALOGUE TAB ================= */
+function renderCatalogue(){
+  const b=document.getElementById('catBody');
+  let h='<h2 class="vh">Catalogue</h2><p class="sub-note">The shared building blocks every project draws on. Read-only: changes are made by pull request to <code>data/registry.json</code>.</p><div class="cat-grid">';
+  // Data sources
+  h+='<div class="catbox"><div class="h"><span class="kd" style="background:var(--data)"></span><b>Data sources</b></div><div class="body" id="catData">';
+  D.dataSources.forEach(ds=>{ h+='<div class="citem" data-ds="'+ds.id+'"><span class="nm">'+esc(ds.name)+'</span></div>';
+    (ds.subs||[]).forEach(s=>{h+='<div class="citem sub" data-ds="'+ds.id+'" data-sub="'+s.id+'"><span class="nm">'+esc(s.name)+'</span><span class="use">'+subUsage(s.id)+' use(s)</span></div>';});
+  });
+  h+='</div></div>';
+  // Techniques
+  h+='<div class="catbox"><div class="h"><span class="kd" style="background:var(--technique)"></span><b>Techniques</b></div><div class="body" id="catTech">';
+  D.techniques.forEach(t=>{h+='<div class="citem" data-t="'+t.id+'"><span class="nm">'+esc(t.name)+'</span><span class="use">'+techUsage(t.id)+' use(s)</span></div>';});
+  h+='</div></div>';
+  // Components (classes → sub-classes)
+  h+='<div class="catbox"><div class="h"><span class="kd" style="background:var(--component)"></span><b>Components (tools)</b></div><div class="body" id="catComp">';
+  D.components.forEach(c=>{ h+='<div class="citem" data-c="'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="use">'+compUsage(c.id)+' proj</span></div>';
+    (c.subs||[]).forEach(s=>{h+='<div class="citem sub" data-c="'+c.id+'" data-sub="'+s.id+'"><span class="nm">'+esc(s.name)+'</span><span class="use">'+compUsage(s.id)+'</span></div>';});
+  });
+  h+='</div></div>';
+  h+='</div>';
+  b.innerHTML=h;
+}
+function subUsage(sid){let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>(r.datas||[]).includes(sid)))n++;}return n;}
+function techUsage(tid){let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>(r.techs||[]).includes(tid)))n++;}return n;}
+/* ================= VIEWS ================= */
+let view='projects';
+function setView(v){view=v;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));['projects','relations','catalogue'].forEach(x=>document.getElementById('v_'+x).classList.toggle('active',x===v));if(v==='relations')renderRelations();if(v==='catalogue')renderCatalogue();}
+function render(){renderProjectList();renderProjectDetail();if(view==='relations')renderRelations();if(view==='catalogue')renderCatalogue();}
+
+/* ================= TABS ================= */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setView(t.dataset.view));
+
+/* ================= INIT ================= */
+/* Missing or malformed data: replace the whole body with one clear message instead of a blank or half-drawn page. */
+function showDataUnavailable(e){const el=document.createElement('div');el.className='empty-big';el.setAttribute('role','alert');el.style.margin='40px auto';el.textContent='Data unavailable. The registry data could not be loaded ('+(e&&e.message||e)+'). Please try again later.';document.querySelector('.appbody').replaceChildren(el);}
+load().then(d=>{D=d;render();}).catch(showDataUnavailable);
+</script>
+</body>
+</html>

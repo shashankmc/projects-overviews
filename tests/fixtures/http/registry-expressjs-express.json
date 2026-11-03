@@ -1,0 +1,41 @@
+{
+  "_note": "Recorded 2026-11-03; trimmed to the fields used.",
+  "GET https://pypi.org/pypi/express/json": {
+    "status": 404,
+    "data": {
+      "message": "Not Found"
+    }
+  },
+  "GET https://crandb.r-pkg.org/express": {
+    "status": 404,
+    "data": {
+      "error": "not_found",
+      "reason": "document not found"
+    }
+  },
+  "GET https://registry.npmjs.org/express": {
+    "status": 200,
+    "data": {
+      "name": "express",
+      "repository": {
+        "url": "git+https://github.com/expressjs/express.git",
+        "type": "git"
+      },
+      "homepage": "https://expressjs.com/",
+      "bugs": {
+        "url": "https://github.com/expressjs/express/issues"
+      }
+    }
+  },
+  "GET https://archive.softwareheritage.org/api/1/origin/https://github.com/expressjs/express/get/": {
+    "status": 200,
+    "data": {
+      "url": "https://github.com/expressjs/express",
+      "visit_types": [
+        "git"
+      ],
+      "origin_visits_url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/expressjs/express/visits/",
+      "metadata_authorities_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:ori:564f5a0696bfd47c095d6b007b5b039298ddf0f7/authorities/"
+    }
+  }
+}

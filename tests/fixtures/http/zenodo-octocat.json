@@ -1,0 +1,12 @@
+{
+  "_note": "Recorded 2026-11-03; trimmed to the fields used.",
+  "GET https://zenodo.org/api/records?q=metadata.related_identifiers.identifier%3Ahttps%5C%3A%5C%2F%5C%2Fgithub%5C.com%5C%2Foctocat%5C%2FHello%5C-World%5C%2Ftree%5C%2F*&size=10": {
+    "status": 200,
+    "data": {
+      "hits": {
+        "total": 0,
+        "hits": []
+      }
+    }
+  }
+}

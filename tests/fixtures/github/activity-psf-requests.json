@@ -1,0 +1,28 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/psf/requests": {
+    "status": 200,
+    "data": {
+      "full_name": "psf/requests",
+      "html_url": "https://github.com/psf/requests",
+      "private": false,
+      "default_branch": "main",
+      "homepage": "https://requests.readthedocs.io/en/latest/",
+      "pushed_at": "2026-11-02T16:55:12Z"
+    }
+  },
+  "GET /repos/psf/requests/commits?sha=main&per_page=1": {
+    "status": 200,
+    "data": [
+      {
+        "sha": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+        "html_url": "https://github.com/psf/requests/commit/3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+        "commit": {
+          "committer": {
+            "date": "2026-10-26T17:14:41Z"
+          }
+        }
+      }
+    ]
+  }
+}

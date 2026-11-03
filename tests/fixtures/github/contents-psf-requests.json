@@ -1,0 +1,187 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/psf/requests/contents": {
+    "status": 200,
+    "data": [
+      {
+        "name": ".coveragerc",
+        "path": ".coveragerc",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.coveragerc"
+      },
+      {
+        "name": ".git-blame-ignore-revs",
+        "path": ".git-blame-ignore-revs",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.git-blame-ignore-revs"
+      },
+      {
+        "name": ".github",
+        "path": ".github",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/.github"
+      },
+      {
+        "name": ".gitignore",
+        "path": ".gitignore",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.gitignore"
+      },
+      {
+        "name": ".pre-commit-config.yaml",
+        "path": ".pre-commit-config.yaml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.pre-commit-config.yaml"
+      },
+      {
+        "name": ".readthedocs.yaml",
+        "path": ".readthedocs.yaml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.readthedocs.yaml"
+      },
+      {
+        "name": "AUTHORS.rst",
+        "path": "AUTHORS.rst",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/AUTHORS.rst"
+      },
+      {
+        "name": "HISTORY.md",
+        "path": "HISTORY.md",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/HISTORY.md"
+      },
+      {
+        "name": "LICENSE",
+        "path": "LICENSE",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/LICENSE"
+      },
+      {
+        "name": "MANIFEST.in",
+        "path": "MANIFEST.in",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/MANIFEST.in"
+      },
+      {
+        "name": "Makefile",
+        "path": "Makefile",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/Makefile"
+      },
+      {
+        "name": "NOTICE",
+        "path": "NOTICE",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/NOTICE"
+      },
+      {
+        "name": "README.md",
+        "path": "README.md",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/README.md"
+      },
+      {
+        "name": "docs",
+        "path": "docs",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs"
+      },
+      {
+        "name": "ext",
+        "path": "ext",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/ext"
+      },
+      {
+        "name": "pyproject.toml",
+        "path": "pyproject.toml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/pyproject.toml"
+      },
+      {
+        "name": "requirements-dev.txt",
+        "path": "requirements-dev.txt",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/requirements-dev.txt"
+      },
+      {
+        "name": "setup.py",
+        "path": "setup.py",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/setup.py"
+      },
+      {
+        "name": "src",
+        "path": "src",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/src"
+      },
+      {
+        "name": "tests",
+        "path": "tests",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/tests"
+      },
+      {
+        "name": "tox.ini",
+        "path": "tox.ini",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/tox.ini"
+      }
+    ]
+  },
+  "GET /repos/psf/requests/contents/.github/workflows": {
+    "status": 200,
+    "data": [
+      {
+        "name": "close-issues.yml",
+        "path": ".github/workflows/close-issues.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/close-issues.yml"
+      },
+      {
+        "name": "codeql-analysis.yml",
+        "path": ".github/workflows/codeql-analysis.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/codeql-analysis.yml"
+      },
+      {
+        "name": "lint.yml",
+        "path": ".github/workflows/lint.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/lint.yml"
+      },
+      {
+        "name": "lock-issues.yml",
+        "path": ".github/workflows/lock-issues.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/lock-issues.yml"
+      },
+      {
+        "name": "publish.yml",
+        "path": ".github/workflows/publish.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/publish.yml"
+      },
+      {
+        "name": "run-tests.yml",
+        "path": ".github/workflows/run-tests.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/run-tests.yml"
+      },
+      {
+        "name": "typecheck.yml",
+        "path": ".github/workflows/typecheck.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/typecheck.yml"
+      },
+      {
+        "name": "zizmor.yml",
+        "path": ".github/workflows/zizmor.yml",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/.github/workflows/zizmor.yml"
+      }
+    ]
+  }
+}

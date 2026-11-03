@@ -1,0 +1,97 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/psf/requests/readme": {
+    "status": 200,
+    "data": {
+      "name": "README.md",
+      "path": "README.md",
+      "type": "file",
+      "html_url": "https://github.com/psf/requests/blob/main/README.md",
+      "encoding": "base64",
+      "content": "IyBSZXF1ZXN0cwoKWyFbVmVyc2lvbl0oaHR0cHM6Ly9pbWcuc2hpZWxkcy5pby9weXBpL3YvcmVxdWVzdHMuc3ZnP21heEFnZT04NjQwMCldKGh0dHBzOi8vcHlwaS5vcmcvcHJvamVjdC9yZXF1ZXN0cy8pClshW1N1cHBvcnRlZCBWZXJzaW9uc10oaHR0cHM6Ly9pbWcuc2hpZWxkcy5pby9weXBpL3B5dmVyc2lvbnMvcmVxdWVzdHMuc3ZnKV0oaHR0cHM6Ly9weXBpLm9yZy9wcm9qZWN0L3JlcXVlc3RzKQpbIVtEb3dubG9hZHNdKGh0dHBzOi8vc3RhdGljLnBlcHkudGVjaC9iYWRnZS9yZXF1ZXN0cy9tb250aCldKGh0dHBzOi8vcGVweS50ZWNoL3Byb2plY3QvcmVxdWVzdHMpClshW0NvbnRyaWJ1dG9yc10oaHR0cHM6Ly9pbWcuc2hpZWxkcy5pby9naXRodWIvY29udHJpYnV0b3JzL3BzZi9yZXF1ZXN0cy5zdmcpXShodHRwczovL2dpdGh1Yi5jb20vcHNmL3JlcXVlc3RzL2dyYXBocy9jb250cmlidXRvcnMpClshW0RvY3VtZW50YXRpb25dKGh0dHBzOi8vcmVhZHRoZWRvY3Mub3JnL3Byb2plY3RzL3JlcXVlc3RzL2JhZGdlLz92ZXJzaW9uPWxhdGVzdCldKGh0dHBzOi8vcmVxdWVzdHMucmVhZHRoZWRvY3MuaW8pCgoqKlJlcXVlc3RzKiogaXMgYSBzaW1wbGUsIHlldCBlbGVnYW50LCBIVFRQIGxpYnJhcnkuCgpgYGBweXRob24KPj4+IGltcG9ydCByZXF1ZXN0cwo+Pj4gciA9IHJlcXVlc3RzLmdldCgnaHR0cHM6Ly9odHRwYmluLm9yZy9iYXNpYy1hdXRoL3VzZXIvcGFzcycsIGF1dGg9KCd1c2VyJywgJ3Bhc3MnKSkKPj4+IHIuc3RhdHVzX2NvZGUKMjAwCj4+PiByLmhlYWRlcnNbJ2NvbnRlbnQtdHlwZSddCidhcHBsaWNhdGlvbi9qc29uOyBjaGFyc2V0PXV0ZjgnCj4+PiByLmVuY29kaW5nCid1dGYtOCcKPj4+IHIudGV4dAoneyJhdXRoZW50aWNhdGVkIjogdHJ1ZSwgLi4uJwo+Pj4gci5qc29uKCkKeydhdXRoZW50aWNhdGVkJzogVHJ1ZSwgLi4ufQpgYGAKClJlcXVlc3RzIGFsbG93cyB5b3UgdG8gc2VuZCBIVFRQLzEuMSByZXF1ZXN0cyBleHRyZW1lbHkgZWFzaWx5LiBUaGVyZeKAmXMgbm8gbmVlZCB0byBtYW51YWxseSBhZGQgcXVlcnkgc3RyaW5ncyB0byB5b3VyIFVSTHMsIG9yIHRvIGZvcm0tZW5jb2RlIHlvdXIgYFBVVGAgJiBgUE9TVGAgZGF0YSDigJQgYnV0IG5vd2FkYXlzLCBqdXN0IHVzZSB0aGUgYGpzb25gIG1ldGhvZCEKClJlcXVlc3RzIGlzIG9uZSBvZiB0aGUgbW9zdCBkb3dubG9hZGVkIFB5dGhvbiBwYWNrYWdlcyB0b2RheSwgcHVsbGluZyBpbiBhcm91bmQgYDMwME0gZG93bmxvYWRzIC8gd2Vla2Ag4oCUIGFjY29yZGluZyB0byBHaXRIdWIsIFJlcXVlc3RzIGlzIGN1cnJlbnRseSBbZGVwZW5kZWQgdXBvbl0oaHR0cHM6Ly9naXRodWIuY29tL3BzZi9yZXF1ZXN0cy9uZXR3b3JrL2RlcGVuZGVudHM/cGFja2FnZV9pZD1VR0ZqYTJGblpTMDFOekE0T1RFeE5nJTNEJTNEKSBieSBgNCwwMDAsMDAwK2AgcmVwb3NpdG9yaWVzLgoKIyMgSW5zdGFsbGluZyBSZXF1ZXN0cyBhbmQgU3VwcG9ydGVkIFZlcnNpb25zCgpSZXF1ZXN0cyBpcyBhdmFpbGFibGUgb24gUHlQSToKCmBgYGNvbnNvbGUKJCBweXRob24gLW0gcGlwIGluc3RhbGwgcmVxdWVzdHMKYGBgCgpSZXF1ZXN0cyBvZmZpY2lhbGx5IHN1cHBvcnRzIFB5dGhvbiAzLjEwKy4KCiMjIFN1cHBvcnRlZCBGZWF0dXJlcyAmIEJlc3TigJNQcmFjdGljZXMKClJlcXVlc3RzIGlzIHJlYWR5IGZvciB0aGUgZGVtYW5kcyBvZiBidWlsZGluZyByb2J1c3QgYW5kIHJlbGlhYmxlIEhUVFDigJNzcGVha2luZyBhcHBsaWNhdGlvbnMsIGZvciB0aGUgbmVlZHMgb2YgdG9kYXkuCgotIEtlZXAtQWxpdmUgJiBDb25uZWN0aW9uIFBvb2xpbmcKLSBJbnRlcm5hdGlvbmFsIERvbWFpbnMgYW5kIFVSTHMKLSBTZXNzaW9ucyB3aXRoIENvb2tpZSBQZXJzaXN0ZW5jZQotIEJyb3dzZXItc3R5bGUgVExTL1NTTCBWZXJpZmljYXRpb24KLSBCYXNpYyAmIERpZ2VzdCBBdXRoZW50aWNhdGlvbgotIEZhbWlsaWFyIGBkaWN0YOKAk2xpa2UgQ29va2llcwotIEF1dG9tYXRpYyBDb250ZW50IERlY29tcHJlc3Npb24gYW5kIERlY29kaW5nCi0gTXVsdGktcGFydCBGaWxlIFVwbG9hZHMKLSBTT0NLUyBQcm94eSBTdXBwb3J0Ci0gQ29ubmVjdGlvbiBUaW1lb3V0cwotIFN0cmVhbWluZyBEb3dubG9hZHMKLSBBdXRvbWF0aWMgaG9ub3Jpbmcgb2YgYC5uZXRyY2AKLSBDaHVua2VkIEhUVFAgUmVxdWVzdHMKCiMjIENsb25pbmcgdGhlIHJlcG9zaXRvcnkKCldoZW4gY2xvbmluZyB0aGUgUmVxdWVzdHMgcmVwb3NpdG9yeSwgeW91IG1heSBuZWVkIHRvIGFkZCB0aGUgYC1jCmZldGNoLmZzY2suYmFkVGltZXpvbmU9aWdub3JlYCBmbGFnIHRvIGF2b2lkIGFuIGVycm9yIGFib3V0IGEgYmFkIGNvbW1pdCB0aW1lc3RhbXAgKHNlZQpbdGhpcyBpc3N1ZV0oaHR0cHM6Ly9naXRodWIuY29tL3BzZi9yZXF1ZXN0cy9pc3N1ZXMvMjY5MCkgZm9yIG1vcmUgYmFja2dyb3VuZCk6CgpgYGBzaGVsbApnaXQgY2xvbmUgLWMgZmV0Y2guZnNjay5iYWRUaW1lem9uZT1pZ25vcmUgaHR0cHM6Ly9naXRodWIuY29tL3BzZi9yZXF1ZXN0cy5naXQKYGBgCgpZb3UgY2FuIGFsc28gYXBwbHkgdGhpcyBzZXR0aW5nIHRvIHlvdXIgZ2xvYmFsIEdpdCBjb25maWc6CgpgYGBzaGVsbApnaXQgY29uZmlnIC0tZ2xvYmFsIGZldGNoLmZzY2suYmFkVGltZXpvbmUgaWdub3JlCmBgYAoKLS0tCgpbIVtLZW5uZXRoIFJlaXR6XShodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vcHNmL3JlcXVlc3RzL21haW4vZXh0L2tyLnBuZyldKGh0dHBzOi8va2VubmV0aHJlaXR6Lm9yZykgWyFbUHl0aG9uIFNvZnR3YXJlIEZvdW5kYXRpb25dKGh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9wc2YvcmVxdWVzdHMvbWFpbi9leHQvcHNmLnBuZyldKGh0dHBzOi8vd3d3LnB5dGhvbi5vcmcvcHNmKQo="
+    }
+  },
+  "GET /repos/psf/requests/contents/docs": {
+    "status": 200,
+    "data": [
+      {
+        "name": ".nojekyll",
+        "path": "docs/.nojekyll",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/.nojekyll"
+      },
+      {
+        "name": "Makefile",
+        "path": "docs/Makefile",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/Makefile"
+      },
+      {
+        "name": "_static",
+        "path": "docs/_static",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs/_static"
+      },
+      {
+        "name": "_templates",
+        "path": "docs/_templates",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs/_templates"
+      },
+      {
+        "name": "_themes",
+        "path": "docs/_themes",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs/_themes"
+      },
+      {
+        "name": "api.rst",
+        "path": "docs/api.rst",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/api.rst"
+      },
+      {
+        "name": "community",
+        "path": "docs/community",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs/community"
+      },
+      {
+        "name": "conf.py",
+        "path": "docs/conf.py",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/conf.py"
+      },
+      {
+        "name": "dev",
+        "path": "docs/dev",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs/dev"
+      },
+      {
+        "name": "index.rst",
+        "path": "docs/index.rst",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/index.rst"
+      },
+      {
+        "name": "make.bat",
+        "path": "docs/make.bat",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/make.bat"
+      },
+      {
+        "name": "requirements.txt",
+        "path": "docs/requirements.txt",
+        "type": "file",
+        "html_url": "https://github.com/psf/requests/blob/main/docs/requirements.txt"
+      },
+      {
+        "name": "user",
+        "path": "docs/user",
+        "type": "dir",
+        "html_url": "https://github.com/psf/requests/tree/main/docs/user"
+      }
+    ]
+  }
+}

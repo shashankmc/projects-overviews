@@ -1,0 +1,34 @@
+name: Nightly FAIR check
+
+# Checks the repos each project lists in data/registry.json against the FAIR
+# rules in src/fair/rules and upserts one rolling issue labelled `fair-report`.
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: fair-check
+  cancel-in-progress: false
+
+jobs:
+  fair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Run FAIR check and upsert the report issue
+        run: npm run fair
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

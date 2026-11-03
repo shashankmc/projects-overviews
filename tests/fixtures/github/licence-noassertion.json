@@ -1,0 +1,30 @@
+{
+  "_note": "licence-met recording with the licence replaced by the API value for an unrecognised LICENSE file.",
+  "GET /repos/cli/cli/license": {
+    "status": 200,
+    "data": {
+      "name": "LICENSE",
+      "path": "LICENSE",
+      "sha": "b6a58a9572cbd7e4550f8205a9c4fd199cd442f2",
+      "size": 1068,
+      "url": "https://api.github.com/repos/cli/cli/contents/LICENSE?ref=trunk",
+      "html_url": "https://github.com/cli/cli/blob/trunk/LICENSE",
+      "git_url": "https://api.github.com/repos/cli/cli/git/blobs/b6a58a9572cbd7e4550f8205a9c4fd199cd442f2",
+      "download_url": "https://raw.githubusercontent.com/cli/cli/trunk/LICENSE",
+      "type": "file",
+      "encoding": "base64",
+      "_links": {
+        "self": "https://api.github.com/repos/cli/cli/contents/LICENSE?ref=trunk",
+        "git": "https://api.github.com/repos/cli/cli/git/blobs/b6a58a9572cbd7e4550f8205a9c4fd199cd442f2",
+        "html": "https://github.com/cli/cli/blob/trunk/LICENSE"
+      },
+      "license": {
+        "key": "other",
+        "name": "Other",
+        "spdx_id": "NOASSERTION",
+        "url": null,
+        "node_id": "MDc6TGljZW5zZTA="
+      }
+    }
+  }
+}

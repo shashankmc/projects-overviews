@@ -1,0 +1,29 @@
+{
+  "_note": "Recorded from api.github.com 2026-11-03; trimmed to the fields used.",
+  "GET /repos/psf/requests/community/profile": {
+    "status": 200,
+    "data": {
+      "files": {
+        "code_of_conduct": {
+          "html_url": "https://github.com/psf/requests/blob/main/.github/CODE_OF_CONDUCT.md"
+        },
+        "code_of_conduct_file": {
+          "html_url": "https://github.com/psf/requests/blob/main/.github/CODE_OF_CONDUCT.md"
+        },
+        "contributing": {
+          "html_url": "https://github.com/psf/requests/blob/main/.github/CONTRIBUTING.md"
+        },
+        "issue_template": {
+          "html_url": "https://github.com/psf/requests/blob/main/.github/ISSUE_TEMPLATE.md"
+        },
+        "pull_request_template": null,
+        "license": {
+          "html_url": "https://github.com/psf/requests/blob/main/LICENSE"
+        },
+        "readme": {
+          "html_url": "https://github.com/psf/requests/blob/main/README.md"
+        }
+      }
+    }
+  }
+}
