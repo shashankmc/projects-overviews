@@ -52,7 +52,7 @@ describe('registry presence rule', () => {
     const { swh } = registryLookups(repo('octocat', 'this-repo-does-not-exist-xyz'));
     const http = overridingHttp(fixtureHttp('registry-repo-not-found'), { [`GET ${swh}`]: { status: 503, data: null } });
     const result = await check('octocat', 'this-repo-does-not-exist-xyz', http);
-    expect(result).toMatchObject({ state: 'unknown', evidence_url: null, detail: expect.stringContaining('upstream_error') });
+    expect(result).toMatchObject({ state: 'unknown', evidence_url: null, detail: expect.stringContaining('server_error') });
   });
 
   it('is still met when one lookup fails (network) but another points back', async () => {

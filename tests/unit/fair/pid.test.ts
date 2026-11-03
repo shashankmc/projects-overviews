@@ -37,9 +37,18 @@ describe('persistent identifier (Zenodo DOI) rule', () => {
     expect((await pid.check(sklearn, gh, offlineContext({ http }))).state).toBe('unmet');
   });
 
-  it('is unknown, not unmet, when Zenodo errors', async () => {
-    const http = overridingHttp(fixtureHttp(), { [`GET ${zenodoSearchUrl(sklearn)}`]: { status: 503, data: null } });
+  it.each([
+    [503, null, 'server_error'],
+    [500, null, 'server_error'],
+    [429, { message: 'Too many requests' }, 'rate_limited'],
+    [404, null, 'not_found'],
+    [401, null, 'auth_expired'],
+    // GitHub's "403 + rate limit message" heuristic must not apply to Zenodo.
+    [403, { message: 'API rate limit exceeded' }, 'forbidden'],
+    [400, null, 'upstream_error'],
+  ])('is unknown, not unmet, when Zenodo answers HTTP %i, classified by its status', async (status, data, cls) => {
+    const http = overridingHttp(fixtureHttp(), { [`GET ${zenodoSearchUrl(sklearn)}`]: { status, data } });
     const result = await pid.check(sklearn, gh, offlineContext({ http }));
-    expect(result).toMatchObject({ state: 'unknown', evidence_url: null, detail: expect.stringContaining('upstream_error') });
+    expect(result).toEqual({ indicator: 'pid', state: 'unknown', evidence_url: null, detail: `Could not check (${cls})` });
   });
 });

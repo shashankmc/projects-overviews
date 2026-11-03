@@ -1,4 +1,4 @@
-import { errorClassOf, unknownResult } from '../errors.ts';
+import { httpErrorClassOf, unknownResult } from '../errors.ts';
 import type { RepoRef, Rule } from '../types.ts';
 import { resultFor } from './shared.ts';
 
@@ -32,7 +32,7 @@ export const pid: Rule = {
   title: 'DOI-bearing release',
   async check(repo, _gh, { http }) {
     const res = await http.get(zenodoSearchUrl(repo));
-    if (res.status !== 200) return unknownResult('pid', errorClassOf(res));
+    if (res.status !== 200) return unknownResult('pid', httpErrorClassOf(res));
     const hits = (res.data as { hits?: { hits?: ZenodoRecord[] } }).hits?.hits ?? [];
     const prefix = `${repo.url}/tree/`.toLowerCase();
     const record = hits.find((h) =>

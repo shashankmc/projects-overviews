@@ -40,7 +40,7 @@ describe('tests/CI rule', () => {
       'GET /repos/psf/requests/contents/.github/workflows': { status: 502, data: null },
     });
     const result = await testsCi.check(requests, gh, offlineContext());
-    expect(result).toMatchObject({ state: 'unknown', detail: expect.stringContaining('upstream_error') });
+    expect(result).toMatchObject({ state: 'unknown', detail: expect.stringContaining('server_error') });
   });
 
   it('is unknown when the listed repo cannot be found', async () => {

@@ -1,4 +1,4 @@
-import { errorClassOf, unknownResult, type ErrorClass } from '../errors.ts';
+import { httpErrorClassOf, unknownResult, type ErrorClass } from '../errors.ts';
 import type { HttpClient, HttpResponse, RepoRef, Rule } from '../types.ts';
 import { resultFor } from './shared.ts';
 
@@ -88,7 +88,7 @@ async function run(http: HttpClient, lookup: Lookup): Promise<Outcome> {
     return { error: err instanceof Error && err.name === 'TimeoutError' ? 'timeout' : 'network_error' };
   }
   if (res.status === 404) return { found: null };
-  if (res.status !== 200 || !res.data || typeof res.data !== 'object') return { error: errorClassOf(res) };
+  if (res.status !== 200 || !res.data || typeof res.data !== 'object') return { error: httpErrorClassOf(res) };
   return { found: lookup.match(res.data) };
 }
 
