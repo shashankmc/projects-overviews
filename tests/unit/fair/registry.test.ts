@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { registry, registryLookups } from '../../../src/fair/rules/registry.ts';
+import { NetworkError } from '../../../src/fair/errors.ts';
 import type { HttpClient } from '../../../src/fair/types.ts';
 import { fixtureClient, fixtureHttp, offlineContext, overridingHttp, repo } from './fixture-client.ts';
 
@@ -43,9 +44,12 @@ describe('registry presence rule', () => {
     expect(result.state).toBe('unmet');
   });
 
-  it('is unmet when no registry or archive knows the repo', async () => {
+  it('is unmet when no registry or archive knows the repo, linking the Software Heritage search where it looked', async () => {
     const result = await check('octocat', 'this-repo-does-not-exist-xyz', fixtureHttp('registry-repo-not-found'));
-    expect(result).toMatchObject({ state: 'unmet', evidence_url: null });
+    expect(result).toMatchObject({
+      state: 'unmet',
+      evidence_url: 'https://archive.softwareheritage.org/browse/search/?q=https%3A%2F%2Fgithub.com%2Foctocat%2Fthis-repo-does-not-exist-xyz',
+    });
   });
 
   it('is unknown, not unmet, when a lookup errors and nothing else matched', async () => {
@@ -60,10 +64,34 @@ describe('registry presence rule', () => {
     const base = fixtureHttp('registry-psf-requests');
     const http: HttpClient = {
       get: async (url) => {
-        if (url === npm) throw new Error('ECONNRESET');
+        if (url === npm) throw new NetworkError('fetch failed');
         return base.get(url);
       },
     };
     expect((await check('psf', 'requests', http)).state).toBe('met');
+  });
+
+  it('does not absorb an internal error in a lookup: it propagates so the run fails loudly', async () => {
+    const { npm } = registryLookups(repo('psf', 'requests'));
+    const base = fixtureHttp('registry-psf-requests');
+    const http: HttpClient = {
+      get: async (url) => {
+        if (url === npm) throw new TypeError('x is not a function');
+        return base.get(url);
+      },
+    };
+    await expect(check('psf', 'requests', http)).rejects.toThrow(TypeError);
+  });
+
+  it('reads a timed-out lookup as unknown (timeout) when nothing else matched', async () => {
+    const { swh } = registryLookups(repo('octocat', 'this-repo-does-not-exist-xyz'));
+    const base = fixtureHttp('registry-repo-not-found');
+    const http: HttpClient = {
+      get: async (url) => {
+        if (url === swh) throw new DOMException('The operation was aborted due to timeout', 'TimeoutError');
+        return base.get(url);
+      },
+    };
+    expect((await check('octocat', 'this-repo-does-not-exist-xyz', http)).detail).toBe('Could not check (timeout)');
   });
 });

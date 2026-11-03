@@ -1,4 +1,4 @@
-import { httpErrorClassOf, unknownResult, type ErrorClass } from '../errors.ts';
+import { httpErrorClassOf, thrownErrorClass, unknownResult, type ErrorClass } from '../errors.ts';
 import type { HttpClient, HttpResponse, RepoRef, Rule } from '../types.ts';
 import { resultFor } from './shared.ts';
 
@@ -18,6 +18,9 @@ export function registryLookups(repo: RepoRef) {
     swh: `https://archive.softwareheritage.org/api/1/origin/${repo.url}/get/`,
   };
 }
+
+/** Software Heritage's archive search for the repo URL: where a human would look to confirm absence. */
+const swhSearchPage = (repo: RepoRef): string => `https://archive.softwareheritage.org/browse/search/?${new URLSearchParams({ q: repo.url })}`;
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -85,7 +88,10 @@ async function run(http: HttpClient, lookup: Lookup): Promise<Outcome> {
   try {
     res = await http.get(lookup.url);
   } catch (err) {
-    return { error: err instanceof Error && err.name === 'TimeoutError' ? 'timeout' : 'network_error' };
+    const error = thrownErrorClass(err);
+    // Not a timeout or network failure: a bug. Let the runner fail the run loudly.
+    if (error === 'internal_error') throw err;
+    return { error };
   }
   if (res.status === 404) return { found: null };
   if (res.status !== 200 || !res.data || typeof res.data !== 'object') return { error: httpErrorClassOf(res) };
@@ -113,6 +119,6 @@ export const registry: Rule = {
     }
     const failed = outcomes.find((o): o is { error: ErrorClass } => 'error' in o);
     if (failed) return unknownResult('registry', failed.error);
-    return result('unmet', null, `No PyPI, CRAN or npm package pointing back, and no Software Heritage origin`);
+    return result('unmet', swhSearchPage(repo), `No PyPI, CRAN or npm package pointing back, and no Software Heritage origin`);
   },
 };
