@@ -289,6 +289,7 @@ function renderProjectDetail(){
   el.innerHTML=
     '<div class="pdetail-h"><b id="pname">'+esc(p.name)+'</b>'+
     '<span class="pill" style="border-color:'+typeColor(p.type)+'">'+(p.type==='research'?'Research':'Software')+'</span></div>'+
+    (p.description?'<p class="sub-note pdesc">'+esc(p.description)+'</p>':'')+
     '<div class="rowsec"><div class="h"><span class="kd" style="background:var(--supply,#22d3ee)"></span><b>Produces</b><small>what this project outputs (may feed other projects)</small></div>'+rowTable(p,'produces')+'</div>'+
     '<div class="rowsec"><div class="h"><span class="kd" style="background:var(--component)"></span><b>Uses</b><small>component (+ data sub-class + technique), or another project’s output</small></div>'+rowTable(p,'uses')+'</div>'+
     '<p class="sub-note">Relations are computed from these rows: a <b>weak tie</b> shares a component sub-class; a <b>moderate tie</b> shares component × data sub-class; a <b>strong tie</b> also shares a technique; a <b>supply</b> is one project producing what another uses. This page is read-only: changes are made by pull request to <code>data/registry.json</code>.</p>';
@@ -392,7 +393,9 @@ function render(){renderProjectList();renderProjectDetail();if(view==='relations
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setView(t.dataset.view));
 
 /* ================= INIT ================= */
-load().then(d=>{D=d;render();}).catch(e=>{document.getElementById('projDetail').textContent='Could not load the registry data ('+e.message+').';});
+/* Missing or malformed data: replace the whole body with one clear message instead of a blank or half-drawn page. */
+function showDataUnavailable(e){const el=document.createElement('div');el.className='empty-big';el.setAttribute('role','alert');el.style.margin='40px auto';el.textContent='Data unavailable. The registry data could not be loaded ('+(e&&e.message||e)+'). Please try again later.';document.querySelector('.appbody').replaceChildren(el);}
+load().then(d=>{D=d;render();}).catch(showDataUnavailable);
 </script>
 </body>
 </html>
