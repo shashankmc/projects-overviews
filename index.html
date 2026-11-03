@@ -382,7 +382,7 @@ function renderCatalogue(){
   h+='</div>';
   b.innerHTML=h;
 }
-function subUsage(sid){let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>r.data===sid))n++;}return n;}
+function subUsage(sid){let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>(r.datas||[]).includes(sid)))n++;}return n;}
 function techUsage(tid){let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>(r.techs||[]).includes(tid)))n++;}return n;}
 /* ================= VIEWS ================= */
 let view='projects';
