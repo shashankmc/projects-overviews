@@ -3,6 +3,8 @@ name: Test and deploy registry page
 on:
   push:
     branches: [main]
+    # Heartbeat commits (heartbeat.yml) change nothing the site serves.
+    paths-ignore: ['status/**']
   pull_request:
   workflow_dispatch:
 
