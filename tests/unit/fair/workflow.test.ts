@@ -27,6 +27,12 @@ describe('fair.yml workflow', () => {
     }
   });
 
+  it('pins every Action to a full commit SHA', () => {
+    const uses = Object.values<any>(wf.jobs).flatMap((j) => j.steps).filter((s) => s.uses).map((s) => s.uses);
+    expect(uses.length).toBeGreaterThan(0);
+    for (const u of uses) expect(u).toMatch(/^[\w.-]+\/[\w.-]+@[0-9a-f]{40}$/);
+  });
+
   it('does not leave the token in the checkout', () => {
     const checkout = Object.values<any>(wf.jobs)
       .flatMap((j) => j.steps)

@@ -10,7 +10,8 @@
     "test:e2e": "playwright test",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json",
-    "fair": "node src/fair/main.ts"
+    "fair": "node src/fair/main.ts",
+    "csp": "node scripts/csp.mjs index.html"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
