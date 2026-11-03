@@ -1,0 +1,649 @@
+{
+  "dataSources": [
+    {
+      "id": "leg",
+      "name": "Legislation",
+      "subs": [
+        {
+          "id": "leg_eu",
+          "name": "EU"
+        },
+        {
+          "id": "leg_nl",
+          "name": "NL"
+        },
+        {
+          "id": "leg_e3q",
+          "name": "ECHR"
+        }
+      ]
+    },
+    {
+      "id": "cl",
+      "name": "Case law",
+      "subs": [
+        {
+          "id": "cl_nl",
+          "name": "NL"
+        },
+        {
+          "id": "cl_cjeu",
+          "name": "CJEU"
+        },
+        {
+          "id": "cl_echr",
+          "name": "ECtHR"
+        }
+      ]
+    },
+    {
+      "id": "ds_i0rok",
+      "name": "Problem descriptions",
+      "subs": [
+        {
+          "id": "ds_i0rok_r0zkv",
+          "name": "NL"
+        }
+      ]
+    },
+    {
+      "id": "ds_d7pn1",
+      "name": "Treaties",
+      "subs": []
+    }
+  ],
+  "techniques": [
+    {
+      "id": "t_rag",
+      "name": "RAG"
+    },
+    {
+      "id": "t_bert",
+      "name": "BERT"
+    },
+    {
+      "id": "t_tfidf",
+      "name": "TF-IDF"
+    },
+    {
+      "id": "t_llm",
+      "name": "LLM"
+    },
+    {
+      "id": "t_cos",
+      "name": "Semantic (cosine) similarity"
+    },
+    {
+      "id": "t_net",
+      "name": "Citation / network analysis"
+    },
+    {
+      "id": "t_73m",
+      "name": "AI Agents"
+    },
+    {
+      "id": "t_sr3l1",
+      "name": "API"
+    },
+    {
+      "id": "t_p5nny",
+      "name": "Cytoscape"
+    }
+  ],
+  "components": [
+    {
+      "id": "c_ingest",
+      "name": "Data ingestion / import",
+      "subs": []
+    },
+    {
+      "id": "c_search",
+      "name": "Search",
+      "subs": [
+        {
+          "id": "c_search_kw",
+          "name": "Keyword"
+        },
+        {
+          "id": "c_search_sem",
+          "name": "Semantic"
+        },
+        {
+          "id": "c_search_qe",
+          "name": "Query enhancement"
+        },
+        {
+          "id": "c_search_ext",
+          "name": "Extractors"
+        },
+        {
+          "id": "c_search_uymx0",
+          "name": "Query generation"
+        },
+        {
+          "id": "c_search_6yy16",
+          "name": "Retrieval augmentation"
+        }
+      ]
+    },
+    {
+      "id": "c_preproc",
+      "name": "Preprocessing",
+      "subs": [
+        {
+          "id": "c_preproc_seg",
+          "name": "Segmentation"
+        },
+        {
+          "id": "c_preproc_hvuez",
+          "name": "Preconditions/Postconditions"
+        },
+        {
+          "id": "c_preproc_oxvl1",
+          "name": "Deontic modalities"
+        }
+      ]
+    },
+    {
+      "id": "c_annotation",
+      "name": "Annotation",
+      "subs": [
+        {
+          "id": "c_annotation_manual",
+          "name": "Manual annotation"
+        },
+        {
+          "id": "c_annotation_scheme",
+          "name": "Scheme / label-set management"
+        },
+        {
+          "id": "c_annotation_pre",
+          "name": "Pre-annotation (AI-assisted)"
+        },
+        {
+          "id": "c_annotation_assign",
+          "name": "Annotator assignment / task distribution"
+        },
+        {
+          "id": "c_annotation_471bv",
+          "name": "IRR"
+        },
+        {
+          "id": "c_annotation_r7ind",
+          "name": "Export/publish"
+        }
+      ]
+    },
+    {
+      "id": "c_network",
+      "name": "Citation / network analysis",
+      "subs": [
+        {
+          "id": "c_network_cite",
+          "name": "Citation extraction / parsing"
+        },
+        {
+          "id": "c_network_centrality",
+          "name": "Centrality scores"
+        },
+        {
+          "id": "c_network_community",
+          "name": "Community detection"
+        },
+        {
+          "id": "c_network_viz",
+          "name": "Network visualization"
+        }
+      ]
+    },
+    {
+      "id": "c_filter",
+      "name": "Filtering / faceting",
+      "subs": []
+    },
+    {
+      "id": "c_draft",
+      "name": "Draft",
+      "subs": []
+    },
+    {
+      "id": "c_export",
+      "name": "Export / publish",
+      "subs": []
+    },
+    {
+      "id": "c_authz",
+      "name": "Authorization",
+      "subs": []
+    },
+    {
+      "id": "c_projmgmt",
+      "name": "Project management",
+      "subs": []
+    }
+  ],
+  "projects": [
+    {
+      "id": "p_dbppz",
+      "name": "Am AI Right",
+      "type": "software",
+      "uses": [
+        {
+          "id": "r_yfpoj",
+          "src": {
+            "proj": "p_dbppz",
+            "row": "r_muamy"
+          }
+        },
+        {
+          "id": "r_epito",
+          "src": {
+            "proj": "p_dbppz",
+            "row": "r_7gc4y"
+          }
+        },
+        {
+          "id": "r_r9i27",
+          "src": {
+            "proj": "p_dbppz",
+            "row": "r_hukda"
+          }
+        },
+        {
+          "id": "r_3jn9m",
+          "src": {
+            "proj": "p_dbppz",
+            "row": "r_iyjd7"
+          }
+        },
+        {
+          "id": "r_zm8bu",
+          "src": {
+            "proj": "p_dbppz",
+            "row": "r_qu6hr"
+          }
+        },
+        {
+          "id": "r_wca0u",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_g9g4p",
+            "data": "leg_nl"
+          }
+        },
+        {
+          "id": "r_la130",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_g9g4p",
+            "data": "leg_nl"
+          }
+        }
+      ],
+      "produces": [
+        {
+          "id": "r_muamy",
+          "comp": "c_preproc_seg",
+          "datas": [
+            "cl_nl"
+          ],
+          "techs": [
+            "t_bert"
+          ]
+        },
+        {
+          "id": "r_7gc4y",
+          "comp": "c_preproc_hvuez",
+          "datas": [
+            "leg_eu"
+          ],
+          "techs": [
+            "t_73m"
+          ]
+        },
+        {
+          "id": "r_hukda",
+          "comp": "c_search_uymx0",
+          "datas": [
+            "ds_i0rok_r0zkv"
+          ],
+          "techs": [
+            "t_llm"
+          ]
+        },
+        {
+          "id": "r_iyjd7",
+          "comp": "c_search_qe",
+          "datas": [
+            "leg_nl"
+          ],
+          "techs": [
+            "t_llm"
+          ]
+        },
+        {
+          "id": "r_qu6hr",
+          "comp": "c_search_6yy16",
+          "datas": [
+            "leg_nl"
+          ],
+          "techs": []
+        }
+      ]
+    },
+    {
+      "id": "p_9klfx",
+      "name": "Lawnotation",
+      "type": "software",
+      "uses": [
+        {
+          "id": "r_ep6oh",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_yhkn7"
+          }
+        },
+        {
+          "id": "r_gma2m",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_wdw0b"
+          }
+        },
+        {
+          "id": "r_5b7ha",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_2pynd"
+          }
+        },
+        {
+          "id": "r_brkcj",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_fvymj"
+          }
+        },
+        {
+          "id": "r_1oa00",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_dijzh"
+          }
+        },
+        {
+          "id": "r_js326",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_5lun9"
+          }
+        },
+        {
+          "id": "r_dhafk",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_ezk03"
+          }
+        }
+      ],
+      "produces": [
+        {
+          "id": "r_wdw0b",
+          "comp": "c_annotation_manual",
+          "datas": [],
+          "techs": []
+        },
+        {
+          "id": "r_2pynd",
+          "comp": "c_annotation_scheme",
+          "datas": [],
+          "techs": []
+        },
+        {
+          "id": "r_fvymj",
+          "comp": "c_annotation_pre",
+          "datas": [],
+          "techs": []
+        },
+        {
+          "id": "r_dijzh",
+          "comp": "c_annotation_assign",
+          "datas": [],
+          "techs": []
+        },
+        {
+          "id": "r_5lun9",
+          "comp": "c_annotation_471bv",
+          "datas": [],
+          "techs": []
+        },
+        {
+          "id": "r_ezk03",
+          "comp": "c_annotation_r7ind",
+          "datas": [],
+          "techs": []
+        }
+      ]
+    },
+    {
+      "id": "p_1wdb6",
+      "name": "BAIGLE",
+      "type": "software",
+      "uses": [
+        {
+          "id": "r_wxrd4",
+          "src": {
+            "proj": "p_9klfx",
+            "row": "r_ezk03"
+          }
+        }
+      ],
+      "produces": []
+    },
+    {
+      "id": "p_sskx9",
+      "name": "CLE (Case Law Explorer)",
+      "type": "software",
+      "uses": [
+        {
+          "id": "r_oonid",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_dlngu"
+          }
+        },
+        {
+          "id": "r_y1krj",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_yhkn7"
+          }
+        },
+        {
+          "id": "r_8h8of",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_g9g4p"
+          }
+        },
+        {
+          "id": "r_w384h",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_q9e2y",
+            "data": "cl_nl"
+          }
+        },
+        {
+          "id": "r_e9e0a",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_q9e2y"
+          }
+        },
+        {
+          "id": "r_v155e",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_zp0ec"
+          }
+        },
+        {
+          "id": "r_xtbsj",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_6qw4h"
+          }
+        },
+        {
+          "id": "r_qsrv5",
+          "src": {
+            "proj": "p_sskx9",
+            "row": "r_y8td2",
+            "data": "cl_nl"
+          }
+        }
+      ],
+      "produces": [
+        {
+          "id": "r_dlngu",
+          "comp": "c_search_kw",
+          "datas": [
+            "cl_nl",
+            "cl_cjeu",
+            "cl_echr"
+          ],
+          "techs": [
+            "t_tfidf"
+          ]
+        },
+        {
+          "id": "r_y8td2",
+          "comp": "c_search_sem",
+          "datas": [
+            "cl_nl"
+          ],
+          "techs": [
+            "t_cos"
+          ]
+        },
+        {
+          "id": "r_yhkn7",
+          "comp": "c_search_ext",
+          "datas": [
+            "cl_nl",
+            "cl_echr",
+            "cl_cjeu"
+          ],
+          "techs": [
+            "t_sr3l1"
+          ]
+        },
+        {
+          "id": "r_g9g4p",
+          "comp": "c_network_cite",
+          "datas": [
+            "cl_nl",
+            "cl_cjeu",
+            "cl_echr",
+            "leg_eu",
+            "leg_nl",
+            "ds_223js"
+          ],
+          "techs": [
+            "t_sr3l1"
+          ]
+        },
+        {
+          "id": "r_ri7uu",
+          "comp": "c_network_community",
+          "datas": [
+            "cl_nl",
+            "cl_cjeu",
+            "leg_e3q"
+          ],
+          "techs": [
+            "t_net"
+          ]
+        },
+        {
+          "id": "r_q9e2y",
+          "comp": "c_network_centrality",
+          "datas": [
+            "cl_nl",
+            "cl_cjeu",
+            "cl_echr",
+            "leg_eu",
+            "leg_nl",
+            "leg_e3q"
+          ],
+          "techs": [
+            "t_net"
+          ]
+        },
+        {
+          "id": "r_6qw4h",
+          "comp": "c_export",
+          "datas": [],
+          "techs": []
+        },
+        {
+          "id": "r_zp0ec",
+          "comp": "c_network_viz",
+          "datas": [
+            "cl_nl",
+            "cl_cjeu",
+            "cl_echr",
+            "leg_eu",
+            "leg_nl",
+            "leg_e3q"
+          ],
+          "techs": [
+            "t_p5nny"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "p_yajcy",
+      "name": "BlueLab",
+      "type": "software",
+      "uses": [
+        {
+          "id": "r_3atwl",
+          "src": {
+            "proj": "p_yajcy",
+            "row": "r_gjs5y",
+            "data": "ds_d7pn1"
+          }
+        },
+        {
+          "id": "r_fum4b",
+          "src": {
+            "proj": "p_dbppz",
+            "row": "r_7gc4y",
+            "data": "leg_eu"
+          }
+        }
+      ],
+      "produces": [
+        {
+          "id": "r_gjs5y",
+          "comp": "c_preproc_oxvl1",
+          "datas": [
+            "ds_d7pn1"
+          ],
+          "techs": []
+        }
+      ]
+    },
+    {
+      "id": "p_v6vh7",
+      "name": "JusticeBot",
+      "type": "software",
+      "uses": [],
+      "produces": []
+    }
+  ],
+  "current": "p_sskx9"
+}
