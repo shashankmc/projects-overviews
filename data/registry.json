@@ -335,6 +335,14 @@
       "id": "p_9klfx",
       "name": "Lawnotation",
       "type": "software",
+      "repos": [
+        "https://github.com/MaastrichtU-BISS/lawnotation",
+        "https://github.com/MaastrichtU-BISS/lawnotation-landing-page",
+        "https://github.com/MaastrichtU-BISS/lawnotation-parser",
+        "https://github.com/MaastrichtU-BISS/lawnotation-iaa",
+        "https://github.com/MaastrichtU-BISS/vue-iaa-metrics",
+        "https://github.com/MaastrichtU-BISS/vue-labelset-editor"
+      ],
       "uses": [
         {
           "id": "r_ep6oh",
@@ -444,6 +452,21 @@
       "id": "p_sskx9",
       "name": "CLE (Case Law Explorer)",
       "type": "software",
+      "repos": [
+        "https://github.com/maastrichtlawtech/case-law-explorer",
+        "https://github.com/MaastrichtU-BISS/caselaw-ui",
+        "https://github.com/MaastrichtU-BISS/caselaw-auth",
+        "https://github.com/MaastrichtU-BISS/case-law-explorer-landing-page",
+        "https://github.com/MaastrichtU-BISS/node-legal-docs-client",
+        "https://github.com/MaastrichtU-BISS/go-legal-docs-client",
+        "https://github.com/MaastrichtU-BISS/node-legal-docs-import",
+        "https://github.com/MaastrichtU-BISS/go-legal-docs-import",
+        "https://github.com/MaastrichtU-BISS/vue-legal-docs-import",
+        "https://github.com/MaastrichtU-BISS/vue-legal-docs-visualizer",
+        "https://github.com/MaastrichtU-BISS/vue-legal-query-builder",
+        "https://github.com/MaastrichtU-BISS/legal-docs-types",
+        "https://github.com/MaastrichtU-BISS/celex-articles-extractor"
+      ],
       "uses": [
         {
           "id": "r_oonid",
