@@ -3,158 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-6Iz0R5uCuzSlWxPFLN3FBKQ4iMvAKwIJd5rVGt6MPKY='; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
-<title>Legal NLP Projects — Uses & Relations</title>
+<meta name="description" content="Capability registry of legal NLP research and software projects, their shared data sources, techniques, components, and derived relations.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-tU5bMe5WFiCptToT0piF06JYSjn4dfFO63JtL+UvT9E='; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Legal NLP Projects: Uses &amp; Relations</title>
 <style>
-  :root{
-    --bg:#0f1220; --panel:#171b2e; --panel2:#1e2340; --line:#2b3157; --line2:#3a4170;
-    --ink:#e8eaf6; --muted:#9aa3c7; --muted2:#6b73a0;
-    --data:#f5b544; --technique:#ff6b8b; --component:#4aa3ff;
-    --research:#4aa3ff; --software:#a3e635;
-    --weak:#6b73a0; --strong:#4aa3ff; --supply:#22d3ee;
-    --accent:#4aa3ff; --warn:#f5b544; --shadow:0 6px 24px rgba(0,0,0,.35); --radius:12px;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%}
-  body{background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  button{font:inherit;cursor:pointer;color:inherit}
-  h1,h2,h3{margin:0;font-weight:650}
-  .app{display:flex;flex-direction:column;height:100vh}
-  header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
-  header .title{display:flex;flex-direction:column;line-height:1.1}
-  header .title b{font-size:16px}header .title span{font-size:11px;color:var(--muted)}
-  .tabs{display:flex;gap:4px;margin-left:6px}
-  .tab{padding:7px 14px;border:1px solid var(--line);background:transparent;border-radius:999px;color:var(--muted);font-size:13px}
-  .tab.active{background:var(--panel2);color:var(--ink);border-color:var(--line2)}
-  .spacer{flex:1}
-  select,input[type=text]{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:6px 9px;font:inherit}
-  select:focus,input:focus{outline:2px solid var(--accent)}
-  .btn{padding:7px 12px;border:1px solid var(--line2);background:var(--panel2);border-radius:8px;font-size:13px}
-  .btn:hover{border-color:var(--accent)}
-  .btn.primary{background:var(--accent);border-color:var(--accent);color:#07142b;font-weight:650}
-  .btn.ghost{background:transparent}
-  .btn.sm{padding:3px 9px;font-size:12px}
-  .btn.danger:hover{border-color:var(--technique);color:var(--technique)}
-  .appbody{flex:1;display:flex;min-height:0}
-  .view{flex:1;min-height:0;display:none;flex-direction:column;background:radial-gradient(circle at 20% 0%,#141834,transparent 60%),var(--bg)}
-  .view.active{display:flex}
-  .scroll{flex:1;min-height:0;overflow-y:auto;padding:18px}
-  /* Projects tab */
-  .projlayout{display:flex;gap:0;height:100%}
-  .plist{width:250px;border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column}
-  .plist-h{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-  .plist-h h3{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
-  .plist-body{overflow:auto;padding:8px}
-  .pitem{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;border:1px solid transparent;cursor:pointer;margin-bottom:4px}
-  .pitem:hover{background:var(--panel2)}
-  .pitem.active{background:var(--panel2);border-color:var(--line2)}
-  .pitem .tt{width:9px;height:9px;border-radius:50%;flex:none}
-  .pitem .nm{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pitem .u{font-size:10px;color:var(--muted2)}
-  .pdetail{flex:1;overflow:auto;padding:18px}
-  .pdetail-h{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-  .pdetail-h b{font-size:18px}
-  .type-toggle{display:flex;gap:3px;border:1px solid var(--line2);border-radius:999px;padding:2px}
-  .type-toggle button{border:none;background:transparent;color:var(--muted);border-radius:999px;padding:4px 12px;font-size:12px}
-  .type-toggle button.active[data-t=research]{background:var(--research);color:#07142b;font-weight:650}
-  .type-toggle button.active[data-t=software]{background:var(--software);color:#07142b;font-weight:650}
-  .rowsec{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:16px;overflow:hidden}
-  .rowsec>.h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-  .rowsec>.h .kd{width:11px;height:11px;border-radius:3px}
-  .rowsec>.h b{font-size:14px;flex:1}
-  .rowsec>.h small{color:var(--muted2);font-size:11px}
-  .rowtable{width:100%;border-collapse:collapse}
-  .rowtable th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted2);padding:7px 14px;font-weight:600}
-  .rowtable td{padding:5px 14px;border-top:1px solid var(--line)}
-  .rowtable select{width:100%;min-width:120px}
-  .rowtable .rm{border:none;background:transparent;color:var(--muted2);font-size:14px;padding:3px 7px;border-radius:6px}
-  .rowtable .rm:hover{background:var(--technique);color:#fff}
-  .addrow{padding:9px 14px;border-top:1px solid var(--line)}
-  .badge-shared{font-size:9.5px;color:var(--warn);border:1px solid var(--warn);border-radius:6px;padding:0 5px;margin-left:6px}
-  .fromtag{color:var(--supply);font-size:11px;font-weight:600;margin-right:6px}
-  .techcell{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
-  .tchip{display:inline-flex;align-items:center;gap:2px;font-size:11px;border:1px solid var(--technique);color:var(--technique);border-radius:7px;padding:1px 3px 1px 7px;white-space:nowrap}
-  .tchip button{border:none;background:transparent;color:var(--technique);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;border-radius:4px}
-  .tchip button:hover{background:var(--technique);color:#fff}
-  .techcell .techadd,.techcell .dataadd{min-width:112px;padding:4px 6px}
-  .dchip{display:inline-flex;align-items:center;gap:2px;font-size:11px;border:1px solid var(--data);color:var(--data);border-radius:7px;padding:1px 3px 1px 7px;white-space:nowrap}
-  .dchip button{border:none;background:transparent;color:var(--data);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;border-radius:4px}
-  .dchip button:hover{background:var(--data);color:#3a2c00}
-  .empty{color:var(--muted2);font-size:12px;padding:12px 14px}
-  /* Relations */
-  .checks{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12.5px;margin-bottom:14px}
-  .checks label{display:flex;align-items:center;gap:6px;cursor:pointer}
-  .rb{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px}
-  .rb.weak{background:rgba(107,115,160,.25);color:var(--muted)}
-  .rb.moderate{background:rgba(245,181,68,.18);color:var(--warn)}
-  .rb.strong{background:rgba(74,163,255,.18);color:var(--strong)}
-  .rb.supply{background:rgba(34,211,238,.16);color:var(--supply)}
-  .pill{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
-  .graph-wrap{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;margin-bottom:16px}
-  .edgetable{width:100%;border-collapse:collapse;font-size:12.5px}
-  .edgetable th,.edgetable td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-  .edgetable th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.3px}
-  .combo{display:inline-flex;flex-wrap:wrap;gap:4px}
-  .ct{font-size:11px;border:1px solid var(--line2);border-radius:6px;padding:1px 6px;background:var(--panel2)}
-  .ct .d{color:var(--data)}.ct .t{color:var(--technique)}
-  .empty-big{text-align:center;color:var(--muted);padding:36px;border:1px dashed var(--line2);border-radius:12px}
-  /* Catalogue */
-  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-  .catbox{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
-  .catbox>.h{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-  .catbox>.h .kd{width:11px;height:11px;border-radius:3px}.catbox>.h b{flex:1;font-size:14px}
-  .catbox>.body{padding:10px 12px}
-  .citem{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:8px;font-size:12.5px}
-  .citem:hover{background:var(--panel2)}
-  .citem .nm{flex:1}
-  .citem.sub{margin-left:18px;font-size:12px;color:var(--muted)}
-  .citem .mini{display:flex;gap:2px}
-  .citem .mini button{border:1px solid var(--line2);background:var(--panel);color:var(--muted);border-radius:6px;padding:1px 6px;font-size:11px}
-  .citem .mini button:hover{background:var(--line2);color:var(--ink);border-color:var(--accent)}
-  .citem .use{font-size:10px;color:var(--muted2)}
-  .addline{margin-top:8px;display:flex;gap:6px}
-  .addline input{flex:1}
-  .sub-note{color:var(--muted);margin:0 0 16px;font-size:13px;max-width:900px}
-  h2.vh{margin-bottom:4px}
-  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line2);padding:9px 16px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
-  .toast.show{opacity:1}
-  .modal-bg{position:fixed;inset:0;background:rgba(4,6,16,.66);display:none;align-items:center;justify-content:center;z-index:50}
-  .modal-bg.show{display:flex}
-  .modal{width:420px;max-width:92vw;background:var(--panel);border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  .modal .mh{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:650}
-  .modal .mb{padding:16px;display:flex;flex-direction:column;gap:10px}
-  .modal label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:5px}
-  .modal .mf{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
-  textarea{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:8px;font:inherit}
-  /* relations matrix */
-  .relmatrix{border-collapse:collapse;font-size:12px;margin-bottom:8px}
-  .relmatrix th,.relmatrix td{border:1px solid var(--line);text-align:center}
-  .relmatrix th{background:var(--panel2);color:var(--muted);font-size:11px;height:28px;min-width:30px}
-  .relmatrix th.corner{text-align:left;padding:0 10px;color:var(--muted2);font-weight:600;white-space:nowrap}
-  .relmatrix td.rowh{text-align:left;white-space:nowrap;padding:0 12px;height:30px;background:var(--panel);color:var(--ink)}
-  .relmatrix td.rowh .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle}
-  .relmatrix td.mcell{width:34px;height:30px;font-size:15px;line-height:1}
-  .relmatrix td.diag{background:repeating-linear-gradient(45deg,var(--panel2),var(--panel2) 5px,transparent 5px,transparent 10px)}
-  .sarrow{color:var(--supply);font-weight:700}
-  .tglyph{font-weight:700}
-  .mlegend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
-  .mlegend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:5px}
-  .rb.shares{background:rgba(154,163,199,.2);color:var(--ink)}
-  .lvl{font-size:9.5px;padding:1px 7px;border-radius:999px;border:1px solid var(--line2);color:var(--muted2);margin-left:2px}
-  .lvl.strong{color:var(--strong);border-color:var(--strong)}
-  .lvl.moderate{color:var(--warn);border-color:var(--warn)}
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: Coral (deal 3/3, seed institute-staff-browsing-legal-nlp-5d8b·47bc4dc0·2026-11-17·r0) · redesign: full
+ * nav: top bar with view switcher · signature: derived project relations matrix and produces/uses ledger on cotton sheets · states: empty, error, full
+ * axes: light/grotesk-sans/warm · posture: restrained · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: R, mobile table overflow resolved by collapsing the project rail above the detail sheet under 60rem */
+/* Hallmark · reworded "Legal NLP Projects — Uses & Relations" to "Legal NLP Projects: Uses & Relations" · 19 names the dash */
+:root {
+  color-scheme: light;
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem; --text-3xl: 2.074rem;
+  --text-display-s: 1.44rem; --text-display: 1.728rem; --text-section: 1.2rem; --text-title: 1rem; --text-lead: 1rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --color-error: oklch(52% 0.19 27); --color-success: oklch(50% 0.12 150);
+  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+  --color-paper: oklch(97% 0.006 55); --color-paper-2: oklch(94.5% 0.007 55); --color-paper-3: oklch(91.5% 0.009 55);
+  --color-ink: oklch(21% 0.012 38); --color-ink-2: oklch(29% 0.013 40); --color-muted: oklch(47% 0.013 45);
+  --color-rule: oklch(87% 0.009 55); --color-rule-2: oklch(81% 0.011 55);
+  --color-accent: oklch(74% 0.125 30); --color-accent-ink: oklch(21% 0.012 38); --color-accent-2: oklch(54% 0.165 29); --color-focus: oklch(54% 0.17 30);
+  --color-cotton: oklch(98.8% 0.0045 80); --color-desk: oklch(94.3% 0.008 64); --color-print: oklch(23% 0.012 38);
+  --color-board: oklch(22% 0.011 40); --color-board-type: oklch(96.5% 0.006 70); --color-paid: oklch(55.5% 0.15 33);
+  --shade: 32% 0.03 50; --lit: 100% 0.005 80; --deep: 7% 0.01 40;
+  --font-display: "General Sans", ui-sans-serif, system-ui, sans-serif; --font-body: var(--font-display);
+  --font-outlier: "Geist Mono", ui-monospace, monospace;
+  --radius-card: 8px; --radius-input: 6px; --radius-pill: 999px; --radius-stock: 8px; --rule-hair: 1px;
+  --shadow-card: 0 1px 2px oklch(20% 0.01 35 / 0.05);
+  --edge-stock: inset 0 1px 0 oklch(var(--lit) / 0.9), inset 0 -1px 0 oklch(var(--shade) / 0.07), 0 0 0 0.5px oklch(var(--shade) / 0.22), 0 1px 0 oklch(var(--shade) / 0.12);
+  --cast-stock: 6px 5px 10px -6px oklch(var(--shade) / 0.3); --cast-stock-lift: 12px 10px 18px -8px oklch(var(--shade) / 0.3);
+  --press-groove: inset 1px 1.5px 2px oklch(var(--shade) / 0.16), inset -1px -1px 0 oklch(var(--lit) / 0.9), 0 0 0 0.5px oklch(var(--shade) / 0.2);
+  --tracking-display: -0.03em; --display-weight: 600;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; overflow-x: clip; }
+html { scrollbar-color: var(--color-muted) var(--color-paper); scroll-padding-top: var(--space-3xl); }
+body { background: var(--color-desk); color: var(--color-print); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55; -webkit-font-smoothing: antialiased; caret-color: var(--color-accent-2); }
+::selection { background: color-mix(in oklab, var(--color-accent) 22%, transparent); color: var(--color-ink); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+h1, h2, h3, b#pname { margin: 0; font-family: var(--font-display); font-weight: var(--display-weight); font-synthesis: none; letter-spacing: var(--tracking-display); line-height: 1.15; overflow-wrap: break-word; min-width: 0; text-wrap: balance; color: var(--color-print); }
+h1 { font-size: var(--text-lg); max-width: 36ch; }
+h2, b#pname { font-size: var(--text-section); max-width: 36ch; }
+h3 { font-size: var(--text-title); max-width: 40ch; }
+p { margin: 0; text-wrap: pretty; max-width: 65ch; }
+b, strong { font-weight: 600; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+code { font-family: var(--font-outlier); font-size: var(--text-xs); background: var(--color-paper-2); padding: var(--space-3xs) var(--space-2xs); border-radius: var(--radius-input); color: var(--color-print); }
+
+/* App shell */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-sm) var(--space-lg); background: var(--color-cotton); border-bottom: 1px solid var(--color-rule-2); flex-wrap: wrap; }
+header .title { display: flex; flex-direction: column; gap: var(--space-3xs); min-width: 0; }
+header .title-sub { font-size: var(--text-xs); color: var(--color-ink-2); max-width: 65ch; }
+.tabs { display: inline-flex; align-items: center; gap: var(--space-2xs); padding: var(--space-2xs); background: var(--color-paper-2); border-radius: var(--radius-card); box-shadow: var(--press-groove); }
+.tab { min-height: 36px; padding: var(--space-2xs) var(--space-md); border: 1px solid transparent; border-radius: var(--radius-input); background: transparent; color: var(--color-ink-2); font-size: var(--text-sm); font-weight: 500; transition: transform var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out); }
+.tab:hover { background: var(--color-paper); color: var(--color-print); }
+.tab:active { transform: translateY(1px); }
+.tab.active, .tab[aria-pressed="true"], .tab[aria-current="page"] { background: var(--color-cotton); color: var(--color-print); border-color: var(--color-rule-2); box-shadow: var(--edge-stock), var(--cast-stock); }
+.tab:disabled, .tab[aria-disabled="true"], input:disabled, input[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
+input[aria-invalid="true"] { border-color: var(--color-error); }
+
+.appbody { flex: 1; display: flex; min-height: 0; }
+.view { flex: 1; min-height: 0; min-width: 0; display: none; flex-direction: column; background: var(--color-desk); }
+.view.active { display: flex; }
+.scroll { flex: 1; min-height: 0; overflow-y: auto; padding: var(--space-lg); }
+.scroll:focus-visible, .pdetail:focus-visible, .plist-body:focus-visible, .matrix-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+
+/* Projects tab */
+.projlayout { display: flex; flex: 1; min-height: 0; min-width: 0; }
+.plist { width: 280px; flex-shrink: 0; border-right: 1px solid var(--color-rule-2); background: var(--color-paper); display: flex; flex-direction: column; min-width: 0; }
+.plist-h { padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--color-rule); display: flex; align-items: center; justify-content: space-between; }
+.plist-h h2 { font-size: var(--text-sm); font-weight: 600; color: var(--color-ink-2); letter-spacing: 0; }
+.plist-body { overflow-y: auto; padding: var(--space-xs); display: flex; flex-direction: column; gap: var(--space-2xs); }
+.pitem { display: flex; align-items: center; justify-content: space-between; gap: var(--space-xs); min-height: 40px; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-input); border: 1px solid transparent; cursor: pointer; background: transparent; color: var(--color-print); transition: transform var(--dur-micro) var(--ease-out); }
+.pitem:hover { background: var(--color-cotton); border-color: var(--color-rule); }
+.pitem:active { transform: translateY(1px); }
+.pitem.active { background: var(--color-cotton); border-color: var(--color-accent-2); box-shadow: var(--edge-stock), var(--cast-stock); }
+.pitem .nm { flex: 1; font-size: var(--text-sm); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.pitem .u { font-family: var(--font-outlier); font-variant-numeric: tabular-nums; font-size: var(--text-xs); color: var(--color-ink-2); flex-shrink: 0; }
+
+.pdetail { flex: 1; min-width: 0; overflow-y: auto; padding: var(--space-lg); }
+.pdetail-h { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; gap: var(--space-2xs); font-size: var(--text-xs); font-weight: 500; padding: var(--space-3xs) var(--space-sm); border-radius: var(--radius-pill); border: 1px solid var(--color-rule-2); background: var(--color-cotton); color: var(--color-ink-2); font-variant-numeric: tabular-nums; }
+.pill b { font-family: var(--font-outlier); font-weight: 600; color: var(--color-print); }
+.pill.type-research { border-color: var(--color-accent-2); color: var(--color-accent-2); }
+.pill.type-software { border-color: var(--color-ink-2); color: var(--color-print); }
+
+.sub-note { color: var(--color-ink-2); margin: 0 0 var(--space-md); font-size: var(--text-sm); line-height: 1.55; max-width: 65ch; }
+.vh { margin-bottom: var(--space-xs); }
+.sec-h { margin: var(--space-lg) 0 var(--space-xs); font-size: var(--text-title); }
+
+/* Stationery sheets and tables */
+.rowsec { border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); background: var(--color-cotton); box-shadow: var(--edge-stock), var(--cast-stock); margin-bottom: var(--space-md); overflow: hidden; }
+.rowsec > .h { padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--color-rule); background: var(--color-paper); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); flex-wrap: wrap; }
+.rowsec > .h b { font-family: var(--font-display); font-size: var(--text-md); font-weight: 600; color: var(--color-print); }
+.rowsec > .h small { color: var(--color-ink-2); font-size: var(--text-xs); }
+.rowtable { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.rowtable th { text-align: left; font-size: var(--text-xs); font-weight: 500; color: var(--color-ink-2); padding: var(--space-xs) var(--space-md); background: var(--color-paper); border-bottom: 1px solid var(--color-rule); overflow-wrap: break-word; }
+.rowtable td { padding: var(--space-xs) var(--space-md); border-top: 1px solid var(--color-rule); font-size: var(--text-sm); color: var(--color-print); vertical-align: top; overflow-wrap: break-word; }
+.col-comp { width: 34%; }
+.col-data { width: 36%; }
+.col-tech { width: 30%; }
+.badge-shared { display: inline-block; font-size: var(--text-xs); font-weight: 500; color: var(--color-accent-2); background: var(--color-paper); border: 1px solid var(--color-accent-2); border-radius: var(--radius-input); padding: 0 var(--space-2xs); margin-left: var(--space-xs); }
+.fromtag { color: var(--color-accent-2); font-size: var(--text-xs); font-weight: 600; margin-right: var(--space-xs); }
+.techcell { display: flex; flex-wrap: wrap; gap: var(--space-2xs); align-items: center; }
+.tchip, .dchip { display: inline-flex; align-items: center; font-size: var(--text-xs); border-radius: var(--radius-input); padding: var(--space-3xs) var(--space-xs); background: var(--color-paper); color: var(--color-print); border: 1px solid var(--color-rule-2); }
+.tchip { border-color: var(--color-accent-2); color: var(--color-accent-2); }
+.empty { color: var(--color-ink-2); font-size: var(--text-sm); padding: var(--space-sm) var(--space-md); }
+
+/* Relations tab */
+.checks { display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap; font-size: var(--text-sm); margin-bottom: var(--space-sm); }
+.checks label { display: inline-flex; align-items: center; gap: var(--space-xs); cursor: pointer; min-height: 32px; }
+.checks input[type="checkbox"] { width: 16px; height: 16px; margin: 0; accent-color: var(--color-accent-2); cursor: pointer; }
+.rb { display: inline-block; font-size: var(--text-xs); font-weight: 600; padding: var(--space-3xs) var(--space-xs); border-radius: var(--radius-input); border: 1px solid var(--color-rule-2); background: var(--color-paper); color: var(--color-print); }
+.rb.weak { background: var(--color-paper-2); color: var(--color-ink-2); }
+.rb.moderate { background: var(--color-paper); color: var(--color-print); border-color: var(--color-ink-2); }
+.rb.strong { background: var(--color-cotton); color: var(--color-accent-2); border-color: var(--color-accent-2); }
+.rb.supply { background: var(--color-board); color: var(--color-board-type); border-color: var(--color-board); }
+.rb.shares { background: var(--color-paper-2); color: var(--color-print); }
+.lvl { display: inline-block; font-size: var(--text-xs); font-weight: 500; padding: var(--space-3xs) var(--space-xs); border-radius: var(--radius-pill); border: 1px solid var(--color-rule-2); color: var(--color-ink-2); margin-left: var(--space-2xs); }
+.lvl.strong { color: var(--color-accent-2); border-color: var(--color-accent-2); }
+.lvl.moderate { color: var(--color-print); border-color: var(--color-ink-2); }
+
+.matrix-wrap { overflow-x: auto; background: var(--color-cotton); border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); box-shadow: var(--edge-stock), var(--cast-stock); margin-bottom: var(--space-xs); }
+.relmatrix { width: 100%; border-collapse: collapse; font-size: var(--text-xs); }
+.relmatrix th, .relmatrix td { border: 1px solid var(--color-rule); text-align: center; }
+.relmatrix th { background: var(--color-paper); color: var(--color-ink-2); font-family: var(--font-outlier); font-variant-numeric: tabular-nums; font-size: var(--text-xs); font-weight: 500; height: 32px; min-width: 36px; padding: var(--space-2xs) var(--space-xs); }
+.relmatrix th.corner { font-family: var(--font-body); text-align: left; padding: var(--space-2xs) var(--space-sm); color: var(--color-ink-2); font-weight: 500; white-space: nowrap; }
+.relmatrix td.rowh { text-align: left; white-space: nowrap; padding: var(--space-2xs) var(--space-sm); height: 32px; background: var(--color-cotton); color: var(--color-print); font-weight: 500; }
+.relmatrix td.rowh .idx { font-family: var(--font-outlier); font-variant-numeric: tabular-nums; color: var(--color-ink-2); margin-right: var(--space-2xs); }
+.relmatrix td.mcell { width: 36px; height: 32px; font-size: var(--text-sm); line-height: 1; background: var(--color-cotton); }
+.relmatrix td.mcell--weak { background: var(--color-paper); }
+.relmatrix td.mcell--moderate { background: var(--color-paper-2); }
+.relmatrix td.mcell--strong { background: var(--color-paper-3); }
+.relmatrix td.diag { background: var(--color-paper-2); }
+.sarrow { color: var(--color-print); font-weight: 600; }
+.tglyph { font-weight: 600; color: var(--color-ink-2); }
+.tglyph--strong { color: var(--color-accent-2); }
+.tglyph--moderate { color: var(--color-print); }
+.tglyph--weak { color: var(--color-ink-2); }
+.mlegend { display: flex; gap: var(--space-md); flex-wrap: wrap; font-size: var(--text-xs); color: var(--color-ink-2); margin-bottom: var(--space-md); }
+
+.edgetable-wrap { background: var(--color-cotton); border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); box-shadow: var(--edge-stock), var(--cast-stock); overflow-x: auto; }
+.edgetable { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.edgetable th, .edgetable td { text-align: left; padding: var(--space-xs) var(--space-sm); border-bottom: 1px solid var(--color-rule); vertical-align: top; }
+.edgetable th { color: var(--color-ink-2); font-size: var(--text-xs); font-weight: 500; background: var(--color-paper); white-space: nowrap; }
+.edgetable tbody tr:last-child td { border-bottom: 0; }
+.combo { display: inline-flex; flex-wrap: wrap; gap: var(--space-2xs); }
+.ct { font-size: var(--text-xs); border: 1px solid var(--color-rule-2); border-radius: var(--radius-input); padding: var(--space-3xs) var(--space-xs); background: var(--color-paper); color: var(--color-print); }
+.ct .d { color: var(--color-ink-2); font-weight: 500; }
+.ct .t { color: var(--color-accent-2); font-weight: 500; }
+.empty-big { text-align: center; color: var(--color-ink-2); padding: var(--space-xl) var(--space-lg); margin: var(--space-xl) auto; max-width: 60ch; border: 1px dashed var(--color-rule-2); border-radius: var(--radius-card); background: var(--color-cotton); }
+
+/* Catalogue tab */
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-md); }
+.catbox { border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); background: var(--color-cotton); box-shadow: var(--edge-stock), var(--cast-stock); overflow: hidden; }
+.catbox > .h { padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--color-rule); background: var(--color-paper); display: flex; align-items: center; justify-content: space-between; gap: var(--space-xs); }
+.catbox > .h b { flex: 1; font-family: var(--font-display); font-size: var(--text-md); font-weight: 600; color: var(--color-print); }
+.catbox > .body { padding: var(--space-xs) var(--space-sm); display: flex; flex-direction: column; gap: var(--space-3xs); }
+.citem { display: flex; align-items: center; justify-content: space-between; gap: var(--space-xs); padding: var(--space-2xs) var(--space-xs); border-radius: var(--radius-input); font-size: var(--text-sm); color: var(--color-print); }
+.citem .nm { flex: 1; min-width: 0; overflow-wrap: break-word; }
+.citem.sub { margin-left: var(--space-md); font-size: var(--text-xs); color: var(--color-ink-2); }
+.citem .use { font-family: var(--font-outlier); font-variant-numeric: tabular-nums; font-size: var(--text-xs); color: var(--color-ink-2); flex-shrink: 0; }
+
+@media (max-width: 60rem) {
+  header { padding: var(--space-sm) var(--space-md); }
+  .projlayout { flex-direction: column; }
+  .plist { width: 100%; border-right: 0; border-bottom: 1px solid var(--color-rule-2); }
+  .plist-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-2xs); }
+  .pdetail, .scroll { padding: var(--space-md); }
+}
+@media (max-width: 40rem) {
+  .rowtable th, .rowtable td { padding: var(--space-xs) var(--space-xs); font-size: var(--text-xs); }
+  .cat-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
-    <div class="title"><b>Legal NLP Projects — Uses &amp; Relations</b><span>Each project declares what it uses &amp; produces · shared uses reveal how projects relate</span></div>
-    <div class="tabs">
+    <div class="title">
+      <h1>Legal NLP Projects: Uses &amp; Relations</h1>
+      <p class="title-sub">Each project declares what it uses and produces, and shared uses reveal how projects relate.</p>
+    </div>
+    <nav class="tabs" aria-label="Views">
       <button class="tab active" data-view="projects">Projects</button>
       <button class="tab" data-view="relations">Relations</button>
       <button class="tab" data-view="catalogue">Catalogue</button>
-    </div>
-    <div class="spacer"></div>
+    </nav>
   </header>
 
   <div class="appbody">
@@ -162,7 +205,7 @@
     <main class="view active" id="v_projects">
       <div class="projlayout">
         <aside class="plist">
-          <div class="plist-h"><h3>Projects</h3></div>
+          <div class="plist-h"><h2>Projects</h2></div>
           <div class="plist-body" id="projList"></div>
         </aside>
         <section class="pdetail" id="projDetail"></section>
@@ -191,17 +234,16 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 function proj(){return D.projects.find(p=>p.id===D.current)||D.projects[0];}
 const tech=id=>D.techniques.find(t=>t.id===id);
 function compLeaf(id){for(const c of D.components){if(c.id===id)return{cls:c,sub:null};const s=(c.subs||[]).find(x=>x.id===id);if(s)return{cls:c,sub:s};}return null;}
-function compName(id){const l=compLeaf(id);return l?(l.sub?l.cls.name+' – '+l.sub.name:l.cls.name):'?';}
+function compName(id){const l=compLeaf(id);return l?(l.sub?l.cls.name+': '+l.sub.name:l.cls.name):'?';}
 function dataInfo(id){for(const ds of D.dataSources){if(ds.id===id)return{cls:ds,sub:null};const s=(ds.subs||[]).find(x=>x.id===id);if(s)return{cls:ds,sub:s};}return null;}
-function dataLabel(id){const di=dataInfo(id);return di?(di.sub?di.cls.name+'–'+di.sub.name:di.cls.name):'';}
+function dataLabel(id){const di=dataInfo(id);return di?(di.sub?di.cls.name+': '+di.sub.name:di.cls.name):'';}
 /* a Uses row may reference another project's Produces row via .src.
    .src.data (optional) narrows to a specific configuration (single data sub-class) of that produced row. */
 function resolveRow(r){if(r&&r.src){const p=D.projects.find(x=>x.id===r.src.proj);const pr=p&&(p.produces||[]).find(x=>x.id===r.src.row);if(!pr)return null;if(r.src.data)return {id:pr.id,comp:pr.comp,datas:[r.src.data],techs:pr.techs||[]};return pr;}return r;}
 function techNames(ids){return (ids||[]).map(id=>{const t=tech(id);return t?t.name:null;}).filter(Boolean);}
 function dataNames(ids){return (ids||[]).map(dataLabel).filter(Boolean);}
-function comboLabel(r){if(!r)return '<span class="ct">(removed)</span>';let h='<span class="ct">'+esc(compName(r.comp));const dl=dataNames(r.datas);if(dl.length)h+=' · <span class="d">'+esc(dl.join(', '))+'</span>';const ts=techNames(r.techs);if(ts.length)h+=' · <span class="t">'+esc(ts.join(', '))+'</span>';h+='</span>';return h;}
+function comboLabel(r){if(!r)return '<span class="ct">(removed)</span>';let h='<span class="ct">'+esc(compName(r.comp));const dl=dataNames(r.datas);if(dl.length)h+=', <span class="d">'+esc(dl.join(', '))+'</span>';const ts=techNames(r.techs);if(ts.length)h+=', <span class="t">'+esc(ts.join(', '))+'</span>';h+='</span>';return h;}
 function splitKey(k){const i=k.indexOf('|');return [k.slice(0,i),k.slice(i+1)];}
-function typeColor(t){return t==="research"?"var(--research)":"var(--software)";}
 
 /* how many projects reference a component class or sub-class (uses resolved + produces) */
 function compUsage(cid){const c=D.components.find(x=>x.id===cid);let ids=[cid];if(c&&c.subs)ids=ids.concat(c.subs.map(s=>s.id));let n=0;for(const p of D.projects){const rows=[...p.uses.map(resolveRow).filter(Boolean),...p.produces];if(rows.some(r=>ids.includes(r.comp)))n++;}return n;}
@@ -211,11 +253,11 @@ function rowShared(pid,r){const rr=resolveRow(r);if(!rr)return false;for(const p
 /* ================= RELATIONS ENGINE =================
    Three tie levels (nested):
    weak     = share a component sub-class            (comp)
-   moderate = share component × data sub-class        (comp × data)
-   strong   = also share a technique                  (comp × data × technique)
+   moderate = share component x data sub-class       (comp x data)
+   strong   = also share a technique                 (comp x data x technique)
    A pair's tie type is the strongest level it reaches on any shared combination. */
 function projInfo(p){
-  const comps=new Set(); const md=new Map(); // md: "comp|data" -> Set(techIds), one entry per data sub-class
+  const comps=new Set(); const md=new Map();
   p.uses.forEach(r=>{const rr=resolveRow(r);if(!rr)return;comps.add(rr.comp);(rr.datas||[]).forEach(d=>{if(!d)return;const k=rr.comp+'|'+d;if(!md.has(k))md.set(k,new Set());(rr.techs||[]).forEach(t=>md.get(k).add(t));});});
   return {comps,md};
 }
@@ -225,13 +267,11 @@ function computeTies(){
   for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){
     const A=info[i],B=info[j], combos=[], mdComps=new Set();
     let hasWeak=false,hasModerate=false,hasStrong=false;
-    // moderate / strong: shared comp×data
     [...A.md.keys()].filter(k=>B.md.has(k)).forEach(k=>{
       const inter=[...A.md.get(k)].filter(t=>B.md.get(k).has(t)); const [comp,data]=splitKey(k); mdComps.add(comp);
       if(inter.length){hasStrong=true;combos.push({comp,data,techs:inter,level:'strong'});}
       else{hasModerate=true;combos.push({comp,data,techs:[],level:'moderate'});}
     });
-    // weak: shared component sub-classes not already captured by a moderate/strong combo
     [...A.comps].filter(c=>B.comps.has(c)).forEach(c=>{ if(!mdComps.has(c)){hasWeak=true;combos.push({comp:c,data:'',techs:[],level:'weak'});} });
     if(!combos.length) continue;
     const type=hasStrong?'strong':(hasModerate?'moderate':'weak');
@@ -240,7 +280,6 @@ function computeTies(){
   }
   return ties;
 }
-/* keys a row occupies: comp|data per data sub-class, or comp| when it has no data */
 function rowKeys(r){const ds=(r.datas||[]).filter(Boolean);return ds.length?ds.map(d=>r.comp+'|'+d):[r.comp+'|'];}
 function computeSupply(){
   const ps=D.projects,out=[];
@@ -259,22 +298,21 @@ function renderProjectList(){
   const el=document.getElementById('projList'); el.innerHTML='';
   D.projects.forEach(p=>{
     const div=document.createElement('div'); div.className='pitem'+(p.id===D.current?' active':'');
-    div.innerHTML='<span class="tt" style="background:'+typeColor(p.type)+'"></span><span class="nm">'+esc(p.name)+'</span><span class="u">'+p.produces.length+'p · '+p.uses.length+'u</span>';
+    div.innerHTML='<span class="nm">'+esc(p.name)+'</span><span class="u">'+p.produces.length+'p / '+p.uses.length+'u</span>';
     div.onclick=()=>{D.current=p.id;renderProjectList();renderProjectDetail();};
     el.appendChild(div);
   });
 }
-/* read-only chips for a row's data sub-classes and techniques */
 function dataChips(r){return (r.datas||[]).map(id=>'<span class="dchip">'+esc(dataLabel(id)||'?')+'</span>').join(' ');}
 function techChips(r){return (r.techs||[]).map(id=>{const t=tech(id);return '<span class="tchip">'+esc(t?t.name:'?')+'</span>';}).join(' ');}
 function rowTable(p,which){
   const rows=p[which];
-  let h='<table class="rowtable"><thead><tr><th style="width:34%">Component (tool)</th><th style="width:36%">Data sub-class(es)</th><th style="width:30%">Technique(s)</th></tr></thead><tbody>';
+  let h='<table class="rowtable"><thead><tr><th class="col-comp">Component (tool)</th><th class="col-data">Data sub-class(es)</th><th class="col-tech">Technique(s)</th></tr></thead><tbody>';
   if(!rows.length) h+='<tr><td colspan="3" class="empty">None declared.</td></tr>';
   rows.forEach(r=>{
     if(which==='uses'&&r.src){
       const rr=resolveRow(r); const srcP=D.projects.find(x=>x.id===r.src.proj); const srcLbl=r.src.proj===D.current?'this project':(srcP?srcP.name:'?');
-      h+='<tr><td colspan="3"><span class="fromtag">↳ from '+esc(srcLbl)+':</span> '+comboLabel(rr)+'</td></tr>';
+      h+='<tr><td colspan="3"><span class="fromtag">From '+esc(srcLbl)+':</span> '+comboLabel(rr)+'</td></tr>';
       return;
     }
     const shared=(which==='uses')&&rowShared(p.id,r);
@@ -287,13 +325,14 @@ function rowTable(p,which){
 }
 function renderProjectDetail(){
   const el=document.getElementById('projDetail'); const p=proj();
+  const tCls=p.type==='research'?'type-research':'type-software';
   el.innerHTML=
     '<div class="pdetail-h"><b id="pname">'+esc(p.name)+'</b>'+
-    '<span class="pill" style="border-color:'+typeColor(p.type)+'">'+(p.type==='research'?'Research':'Software')+'</span></div>'+
+    '<span class="pill '+tCls+'">'+(p.type==='research'?'Research':'Software')+'</span></div>'+
     (p.description?'<p class="sub-note pdesc">'+esc(p.description)+'</p>':'')+
-    '<div class="rowsec"><div class="h"><span class="kd" style="background:var(--supply,#22d3ee)"></span><b>Produces</b><small>what this project outputs (may feed other projects)</small></div>'+rowTable(p,'produces')+'</div>'+
-    '<div class="rowsec"><div class="h"><span class="kd" style="background:var(--component)"></span><b>Uses</b><small>component (+ data sub-class + technique), or another project’s output</small></div>'+rowTable(p,'uses')+'</div>'+
-    '<p class="sub-note">Relations are computed from these rows: a <b>weak tie</b> shares a component sub-class; a <b>moderate tie</b> shares component × data sub-class; a <b>strong tie</b> also shares a technique; a <b>supply</b> is one project producing what another uses. This page is read-only: changes are made by pull request to <code>data/registry.json</code>.</p>';
+    '<div class="rowsec"><div class="h"><b>Produces</b><small>what this project outputs (may feed other projects)</small></div>'+rowTable(p,'produces')+'</div>'+
+    '<div class="rowsec"><div class="h"><b>Uses</b><small>component (+ data sub-class + technique), or another project’s output</small></div>'+rowTable(p,'uses')+'</div>'+
+    '<p class="sub-note">Relations are computed from these rows: a <b>weak tie</b> shares a component sub-class; a <b>moderate tie</b> shares component and data sub-class; a <b>strong tie</b> also shares a technique; a <b>supply</b> is one project producing what another uses. This page is read-only: changes are made by pull request to <code>data/registry.json</code>.</p>';
 }
 
 /* ================= RELATIONS TAB ================= */
@@ -302,12 +341,12 @@ const rankOf={weak:1,moderate:2,strong:3};
 function renderRelations(){
   const b=document.getElementById('relBody');
   const ties=computeTies(), supply=computeSupply();
-  let h='<h2 class="vh">Relations</h2><p class="sub-note">Nothing is drawn by hand. Every tie is derived from the projects’ rows. <b>Weak</b> = shared component sub-class. <b>Moderate</b> = shared component × data sub-class. <b>Strong</b> = also share a technique. <b>Supply</b> = one project produces what another uses.</p>';
+  let h='<h2 class="vh">Relations</h2><p class="sub-note">Nothing is drawn by hand. Every tie is derived from the projects’ rows. <b>Weak</b> means a shared component sub-class. <b>Moderate</b> means a shared component and data sub-class. <b>Strong</b> means they also share a technique. <b>Supply</b> means one project produces what another uses.</p>';
   h+='<div class="checks"><span class="pill">'+D.projects.length+' projects</span>'+
     '<label><input type="checkbox" id="f_weak" '+(relFilter.weak?'checked':'')+'> <span class="rb weak">weak tie</span></label>'+
     '<label><input type="checkbox" id="f_moderate" '+(relFilter.moderate?'checked':'')+'> <span class="rb moderate">moderate tie</span></label>'+
     '<label><input type="checkbox" id="f_strong" '+(relFilter.strong?'checked':'')+'> <span class="rb strong">strong tie</span></label>'+
-    '<label><input type="checkbox" id="f_supply" '+(relFilter.supply?'checked':'')+'> <span class="rb supply">supply →</span></label></div>';
+    '<label><input type="checkbox" id="f_supply" '+(relFilter.supply?'checked':'')+'> <span class="rb supply">supply</span></label></div>';
   const showTies=ties.filter(t=>relFilter[t.type]);
   const showSupply=relFilter.supply?supply:[];
   if(!showTies.length&&!showSupply.length){
@@ -315,48 +354,46 @@ function renderRelations(){
     b.innerHTML=h; wireRel(); return;
   }
   const cnt={strong:0,moderate:0,weak:0}; showTies.forEach(t=>cnt[t.type]++);
-  h+='<div class="checks" style="margin:-4px 0 12px"><span class="pill"><b style="color:var(--strong)">'+cnt.strong+'</b> strong</span><span class="pill"><b style="color:var(--warn)">'+cnt.moderate+'</b> moderate</span><span class="pill">'+cnt.weak+' weak</span><span class="pill"><b style="color:var(--supply)">'+showSupply.length+'</b> supply</span></div>';
-  h+='<p class="sub-note" style="margin:0 0 8px">Each cell is the relationship between the <b>row</b> project and the <b>column</b> project. <span class="sarrow">▸</span> = the <b>row supplies the column</b> (produces what it uses); <span class="tglyph" style="color:var(--strong)">↔</span> = they <b>share</b> a component/data configuration. <b>Hover a cell</b> to see exactly what is shared or supplied. (Tie strength is shown only as a faint tint — secondary.)</p>';
+  h+='<div class="checks"><span class="pill"><b>'+cnt.strong+'</b> strong</span><span class="pill"><b>'+cnt.moderate+'</b> moderate</span><span class="pill"><b>'+cnt.weak+'</b> weak</span><span class="pill"><b>'+showSupply.length+'</b> supply</span></div>';
+  h+='<p class="sub-note">Each cell shows the relationship between the <b>row</b> project and the <b>column</b> project. <span class="sarrow">\u25b8</span> means the <b>row supplies the column</b> (produces what it uses); <span class="tglyph tglyph--strong">\u2194</span> means they <b>share</b> a component or data configuration. <b>Hover a cell</b> to see what is shared or supplied. (Tie strength appears as a subtle cell tint.)</p>';
   h+=relMatrix(showTies,showSupply);
-  h+='<h3 style="margin:20px 0 8px;font-size:14px">Details</h3>';
-  h+='<table class="edgetable"><thead><tr><th>Project A</th><th>Relation</th><th>Project B</th><th>Shared combination(s)</th></tr></thead><tbody>';
+  h+='<h3 class="sec-h">Details</h3>';
+  h+='<div class="edgetable-wrap"><table class="edgetable"><thead><tr><th>Project A</th><th>Relation</th><th>Project B</th><th>Shared combination(s)</th></tr></thead><tbody>';
   showSupply.forEach(s=>{
     const combos=s.combos.map(r=>comboLabel(r)).join(' ');
-    h+='<tr><td><b>'+esc(pn(s.from))+'</b></td><td><span class="rb supply">supplies ▶</span></td><td><b>'+esc(pn(s.to))+'</b></td><td><span class="combo">'+combos+'</span></td></tr>';
+    h+='<tr><td><b>'+esc(pn(s.from))+'</b></td><td><span class="rb supply">supplies \u25b6</span></td><td><b>'+esc(pn(s.to))+'</b></td><td><span class="combo">'+combos+'</span></td></tr>';
   });
   showTies.slice().sort((x,y)=>rankOf[y.type]-rankOf[x.type]).forEach(t=>{
-    const combos=t.combos.map(c=>{let s='<span class="ct" title="'+c.level+' match">'+esc(compName(c.comp));if(c.data){const dl=dataLabel(c.data);if(dl)s+=' · <span class="d">'+esc(dl)+'</span>';}if(c.level==='strong'&&c.techs.length)s+=' · <span class="t">'+esc(techNames(c.techs).join(', '))+'</span>';s+='</span>';return s;}).join(' ');
+    const combos=t.combos.map(c=>{let s='<span class="ct" title="'+c.level+' match">'+esc(compName(c.comp));if(c.data){const dl=dataLabel(c.data);if(dl)s+=', <span class="d">'+esc(dl)+'</span>';}if(c.level==='strong'&&c.techs.length)s+=', <span class="t">'+esc(techNames(c.techs).join(', '))+'</span>';s+='</span>';return s;}).join(' ');
     h+='<tr><td><b>'+esc(pn(t.a))+'</b></td><td><span class="rb shares">shares</span> <span class="lvl '+t.type+'">'+t.type+'</span></td><td><b>'+esc(pn(t.b))+'</b></td><td><span class="combo">'+combos+'</span></td></tr>';
   });
-  h+='</tbody></table>';
+  h+='</tbody></table></div>';
   b.innerHTML=h;
   wireRel();
 }
 function pn(id){const p=D.projects.find(x=>x.id===id);return p?p.name:id;}
 function wireRel(){const m={f_weak:'weak',f_moderate:'moderate',f_strong:'strong',f_supply:'supply'};Object.keys(m).forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=()=>{relFilter[m[id]]=el.checked;renderRelations();};});}
-function comboPlain(c){let s=compName(c.comp);if(c.data)s+=' · '+dataLabel(c.data);if(c.level==='strong'&&c.techs&&c.techs.length)s+=' · '+techNames(c.techs).join(', ');return s;}
+function comboPlain(c){let s=compName(c.comp);if(c.data)s+=', '+dataLabel(c.data);if(c.level==='strong'&&c.techs&&c.techs.length)s+=', '+techNames(c.techs).join(', ');return s;}
 function relMatrix(ties,supply){
   const ps=D.projects;
   const tieOf={}; ties.forEach(t=>{tieOf[t.a+'|'+t.b]=t;tieOf[t.b+'|'+t.a]=t;});
   const supOf={}; supply.forEach(s=>{supOf[s.from+'|'+s.to]=s;});
-  const tint={weak:'rgba(107,115,160,.16)',moderate:'rgba(245,181,68,.15)',strong:'rgba(74,163,255,.17)'};
-  const tgc={weak:'#9aa3c7',moderate:'#f5b544',strong:'#4aa3ff'};
-  let h='<div style="overflow:auto"><table class="relmatrix"><thead><tr><th class="corner">row → column</th>';
+  let h='<div class="matrix-wrap"><table class="relmatrix"><thead><tr><th class="corner">Row to column</th>';
   ps.forEach((p,i)=>{h+='<th title="'+esc(p.name)+'">'+(i+1)+'</th>';});
   h+='</tr></thead><tbody>';
   ps.forEach((r,ri)=>{
-    h+='<tr><td class="rowh" title="'+esc(r.name)+'"><span class="dot" style="background:'+typeColor(r.type)+'"></span>'+(ri+1)+'. '+esc(r.name)+'</td>';
+    h+='<tr><td class="rowh" title="'+esc(r.name)+'"><span class="idx">'+(ri+1)+'.</span> '+esc(r.name)+'</td>';
     ps.forEach((c,ci)=>{ if(ri===ci){h+='<td class="diag"></td>';return;}
       const t=tieOf[r.id+'|'+c.id], sup=supOf[r.id+'|'+c.id]; const title=[]; let glyph='';
-      if(sup){glyph+='<span class="sarrow">▸</span>';title.push(esc(r.name)+' supplies '+esc(c.name)+': '+esc(sup.combos.map(x=>compName(x.comp)+(dataNames(x.datas).length?' · '+dataNames(x.datas).join(', '):'')).join(' ; ')));}
-      if(t){glyph+='<span class="tglyph" style="color:'+tgc[t.type]+'">↔</span>';title.push(esc(r.name)+' shares with '+esc(c.name)+' ('+t.type+'): '+esc(t.combos.map(comboPlain).join(' ; ')));}
-      const bg=t?('background:'+tint[t.type]+';'):'';
-      h+='<td class="mcell" style="'+bg+'" title="'+title.join('  |  ')+'">'+glyph+'</td>';
+      if(sup){glyph+='<span class="sarrow">\u25b8</span>';title.push(esc(r.name)+' supplies '+esc(c.name)+': '+esc(sup.combos.map(x=>compName(x.comp)+(dataNames(x.datas).length?', '+dataNames(x.datas).join(', '):'')).join(' ; ')));}
+      if(t){glyph+='<span class="tglyph tglyph--'+t.type+'">\u2194</span>';title.push(esc(r.name)+' shares with '+esc(c.name)+' ('+t.type+'): '+esc(t.combos.map(comboPlain).join(' ; ')));}
+      const cls=t?(' mcell--'+t.type):'';
+      h+='<td class="mcell'+cls+'" title="'+title.join('  |  ')+'">'+glyph+'</td>';
     });
     h+='</tr>';
   });
   h+='</tbody></table></div>';
-  h+='<div class="mlegend"><span><span class="sarrow">▸</span> supplies (row → column)</span><span><span class="tglyph" style="color:var(--strong)">↔</span> shares a configuration</span><span class="muted" style="font-size:11px">faint tint = tie strength (secondary)</span></div>';
+  h+='<div class="mlegend"><span><span class="sarrow">\u25b8</span> supplies (row to column)</span><span><span class="tglyph tglyph--strong">\u2194</span> shares a configuration</span><span>cell tint indicates tie strength</span></div>';
   return h;
 }
 
@@ -364,18 +401,15 @@ function relMatrix(ties,supply){
 function renderCatalogue(){
   const b=document.getElementById('catBody');
   let h='<h2 class="vh">Catalogue</h2><p class="sub-note">The shared building blocks every project draws on. Read-only: changes are made by pull request to <code>data/registry.json</code>.</p><div class="cat-grid">';
-  // Data sources
-  h+='<div class="catbox"><div class="h"><span class="kd" style="background:var(--data)"></span><b>Data sources</b></div><div class="body" id="catData">';
+  h+='<div class="catbox"><div class="h"><b>Data sources</b></div><div class="body" id="catData">';
   D.dataSources.forEach(ds=>{ h+='<div class="citem" data-ds="'+ds.id+'"><span class="nm">'+esc(ds.name)+'</span></div>';
     (ds.subs||[]).forEach(s=>{h+='<div class="citem sub" data-ds="'+ds.id+'" data-sub="'+s.id+'"><span class="nm">'+esc(s.name)+'</span><span class="use">'+subUsage(s.id)+' use(s)</span></div>';});
   });
   h+='</div></div>';
-  // Techniques
-  h+='<div class="catbox"><div class="h"><span class="kd" style="background:var(--technique)"></span><b>Techniques</b></div><div class="body" id="catTech">';
+  h+='<div class="catbox"><div class="h"><b>Techniques</b></div><div class="body" id="catTech">';
   D.techniques.forEach(t=>{h+='<div class="citem" data-t="'+t.id+'"><span class="nm">'+esc(t.name)+'</span><span class="use">'+techUsage(t.id)+' use(s)</span></div>';});
   h+='</div></div>';
-  // Components (classes → sub-classes)
-  h+='<div class="catbox"><div class="h"><span class="kd" style="background:var(--component)"></span><b>Components (tools)</b></div><div class="body" id="catComp">';
+  h+='<div class="catbox"><div class="h"><b>Components (tools)</b></div><div class="body" id="catComp">';
   D.components.forEach(c=>{ h+='<div class="citem" data-c="'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="use">'+compUsage(c.id)+' proj</span></div>';
     (c.subs||[]).forEach(s=>{h+='<div class="citem sub" data-c="'+c.id+'" data-sub="'+s.id+'"><span class="nm">'+esc(s.name)+'</span><span class="use">'+compUsage(s.id)+'</span></div>';});
   });
@@ -395,7 +429,7 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setView(t.dataset.vie
 
 /* ================= INIT ================= */
 /* Missing or malformed data: replace the whole body with one clear message instead of a blank or half-drawn page. */
-function showDataUnavailable(e){const el=document.createElement('div');el.className='empty-big';el.setAttribute('role','alert');el.style.margin='40px auto';el.textContent='Data unavailable. The registry data could not be loaded ('+(e&&e.message||e)+'). Please try again later.';document.querySelector('.appbody').replaceChildren(el);}
+function showDataUnavailable(e){const el=document.createElement('div');el.className='empty-big';el.setAttribute('role','alert');el.textContent='Data unavailable. The registry data could not be loaded ('+(e&&e.message||e)+'). Please try again later.';document.querySelector('.appbody').replaceChildren(el);}
 load().then(d=>{D=d;render();}).catch(showDataUnavailable);
 </script>
 </body>
